@@ -17,6 +17,8 @@ vim.opt.startofline = false
 
 vim.opt.conceallevel = 2
 
+vim.o.signcolumn = "yes:1"
+
 vim.wo.wrap = false
 
 -- Tab related options
@@ -25,8 +27,8 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
--- vim.opt.splitbelow = true
--- vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.

@@ -8,11 +8,11 @@ return {
     },
   },
   -- 自动删除行尾的多余空白字符
-  {
-    "cappyzawa/trim.nvim",
-    event = "BufWritePre", -- 在保存文件前执行修剪
-    opts = {},
-  },
+  -- {
+  --   "cappyzawa/trim.nvim",
+  --   event = "BufWritePre",
+  --   opts = {},
+  -- },
   -- 撤销树可视化
   -- 以树状结构可视化显示撤销历史，便于查看和回退到特定编辑状态
   {
@@ -73,7 +73,7 @@ return {
     "folke/todo-comments.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "folke/snacks.nvim"
+      "folke/snacks.nvim",
     },
     event = "VeryLazy",
     -- stylua: ignore
@@ -105,8 +105,22 @@ return {
     event = "BufReadPost",
     keys = {
       -- Append/insert for each line of visual selections. Similar to block selection insertion.
-      { "mI", function() require("multicursor-nvim").insertVisual() end, mode = "x", desc = "Insert cursors at visual selection" },
-      { "mA", function() require("multicursor-nvim").appendVisual() end, mode = "x", desc = "Append cursors at visual selection" },
+      {
+        "mI",
+        function()
+          require("multicursor-nvim").insertVisual()
+        end,
+        mode = "x",
+        desc = "Insert cursors at visual selection",
+      },
+      {
+        "mA",
+        function()
+          require("multicursor-nvim").appendVisual()
+        end,
+        mode = "x",
+        desc = "Append cursors at visual selection",
+      },
     },
     config = function()
       local mc = require("multicursor-nvim")
