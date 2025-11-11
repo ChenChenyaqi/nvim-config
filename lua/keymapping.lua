@@ -10,6 +10,9 @@ vim.keymap.set("n", "<C-l>", "<C-w>l")
 vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 
+vim.keymap.set({"n", "v"}, "<S-J>", "5j")
+vim.keymap.set({"n", "v"}, "<S-K>", "5k")
+
 vim.keymap.set({ "n", "x" }, "<S-H>", "^", { desc = "Start of line" })
 vim.keymap.set({ "n", "x" }, "<S-L>", "$", { desc = "End of line" })
 vim.keymap.set("n", "y<S-H>", "y^", { desc = "Yank from start of line" })
@@ -17,6 +20,7 @@ vim.keymap.set("n", "y<S-L>", "y$", { desc = "Yank to end of line" })
 
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>:qa<CR>")
 vim.keymap.set({ "n", "x" }, "qq", "<CMD>:q<CR>")
+vim.keymap.set({ "n", "x" }, "<C-s>", "<CMD>:w<CR>", {desc= "Save file"})
 
 vim.keymap.set("n", "<A-z>", "<CMD>set wrap!<CR>", { desc = "Toggle line wrap" })
 

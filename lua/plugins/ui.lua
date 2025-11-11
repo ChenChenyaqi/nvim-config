@@ -1,4 +1,5 @@
 return {
+  -- 显示Copilot图标
   {
     "nvim-tree/nvim-web-devicons",
     opts = {
@@ -11,7 +12,7 @@ return {
       },
     },
   },
-
+  -- 配置底部状态栏
   {
     'nvim-lualine/lualine.nvim',
     dependencies = {
