@@ -6,6 +6,7 @@ return {
       -- 'rafamadriz/friendly-snippets'
       "nvim-tree/nvim-web-devicons",
       "onsails/lspkind.nvim",
+      "fang2hou/blink-copilot"
     },
 
     -- use a release tag to download pre-built binaries
@@ -32,7 +33,7 @@ return {
       -- See :h blink-cmp-config-keymap for defining your own keymap
       keymap = {
         -- If the command/function returns false or nil, the next command/function will be run.
-        preset = "default",
+        preset = "none",
         ["<A-j>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
         ["<A-k>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
         ["<C-n>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
@@ -67,10 +68,24 @@ return {
           if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
             return { "buffer" }
           else
-            return { "lsp", "path", "snippets", "buffer" }
+            return { "copilot", "lsp", "path", "snippets", "buffer" }
           end
         end,
+        per_filetype = {
+          codecompanion = { "codecompanion" },
+        },
+
         providers = {
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
+            opts = {
+              kind_icon = "",
+              kind_hl = "DevIconCopilot",
+            },
+          },
           path = {
             score_offset = 95,
             opts = {
@@ -250,4 +265,3 @@ return {
     opts_extend = { "sources.default" }
   }
 }
-

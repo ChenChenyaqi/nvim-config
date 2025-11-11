@@ -1,8 +1,22 @@
 return {
   {
+    "nvim-tree/nvim-web-devicons",
+    opts = {
+      override = {
+        copilot = {
+          icon = "",
+          color = "#cba6f7", -- Catppuccin.mocha.mauve
+          name = "Copilot",
+        },
+      },
+    },
+  },
+
+  {
     'nvim-lualine/lualine.nvim',
     dependencies = {
-       'nvim-tree/nvim-web-devicons'
+       'nvim-tree/nvim-web-devicons',
+       "AndreM222/copilot-lualine" ,
     },
     opts = {
       options = {
@@ -54,7 +68,25 @@ return {
         padding = 0,
       }
 
+      local copilot = {
+        "copilot",
+        show_colors = true,
+        symbols = {
+          status = {
+            hl = {
+              enabled = mocha.green,
+              sleep = mocha.overlay0,
+              disabled = mocha.surface0,
+              warning = mocha.peach,
+              unknown = mocha.red,
+            },
+          },
+          spinner_color = mocha.mauve,
+        },
+      }
+
       table.insert(opts.sections.lualine_x, 1, macro_recording)
+      table.insert(opts.sections.lualine_c, copilot)
 
       require("lualine").setup(opts)
     end
@@ -68,7 +100,7 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
     init = function() vim.g.barbar_auto_setup = false end,
-    lazy = false,
+    event = { "VeryLazy" },
     keys = {
       { "<A-<>", "<CMD>BufferMovePrevious<CR>", mode = {"n"}, desc = "[Buffer] Move buffer left"  },
       { "<A->>", "<CMD>BufferMoveNext<CR>",     mode = {"n"}, desc = "[Buffer] Move buffer right" },
@@ -160,6 +192,13 @@ return {
         { filter = { event = "msg_show", kind = "", }, opts = { skip = true }, },
       },
     }
-  }
-}
+  },
 
+  {
+    "echasnovski/mini.diff",
+    event = "VeryLazy",
+    version = "*",
+    opts = {},
+  },
+
+}
