@@ -4,6 +4,13 @@ return {
     opts = {
       ensure_installed = {
         "lua-language-server",
+        "typescript-language-server", -- TypeScript LSP
+        "vue-language-server",        -- Vue LSP (新增)
+        "eslint-lsp",                 -- ESLint LSP
+        "prettier",                   -- prettier
+        "html-lsp",                   -- HTML LSP
+        "css-lsp",                    -- CSS LSP
+        "json-lsp",                   -- JSON LSP
       },
     },
     config = function(_, opts)
@@ -42,9 +49,107 @@ return {
       })
 
       local capabilities = require("blink.cmp").get_lsp_capabilities()
-      local lspconfig = require("lspconfig")
 
-      lspconfig["lua_ls"].setup({ capabilities = capabilities })
+      -- 获取 vue-language-server 路径（使用标准 Mason 路径）
+      local vue_language_server_path = vim.fn.stdpath('data') ..
+      '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+
+      -- Lua LS 配置
+      vim.lsp.config('lua_ls', {
+        capabilities = capabilities
+      })
+
+      -- TypeScript LSP 配置 (支持 Vue 文件)
+      vim.lsp.config('ts_ls', {
+        capabilities = capabilities,
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+        init_options = {
+          plugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = vue_language_server_path,
+              languages = { "vue" },
+            },
+          },
+        },
+        settings = {
+          typescript = {
+            inlayHints = {
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+            },
+          },
+          javascript = {
+            inlayHints = {
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+            },
+          },
+        },
+      })
+
+      -- Vue LSP 配置
+      vim.lsp.config('vue_ls', {
+        capabilities = capabilities,
+        filetypes = { 'vue' }
+      })
+
+      -- HTML LSP 配置
+      vim.lsp.config('html', {
+        capabilities = capabilities,
+        filetypes = { 'html' }
+      })
+
+      -- CSS LSP 配置
+      vim.lsp.config('cssls', {
+        capabilities = capabilities,
+        filetypes = { 'css', 'scss', 'less' }
+      })
+
+      -- JSON LSP 配置
+      vim.lsp.config('jsonls', {
+        capabilities = capabilities,
+        filetypes = { 'json', 'jsonc' }
+      })
+
+      -- ESLint LSP 配置
+      vim.lsp.config('eslint', {
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          -- 确保 ESLint 只对支持的文件类型工作
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+          })
+        end,
+        settings = {
+          -- 使用项目中的 ESLint 配置
+          useESLintClass = false,
+          run = "onType",
+          problems = {
+            shortenToSingleLine = false,
+          },
+        },
+      })
+
+      -- 启用所有配置的 LSP
+      vim.lsp.enable('lua_ls')
+      vim.lsp.enable('ts_ls')
+      vim.lsp.enable('vue_ls') -- 新增 Vue LSP
+      vim.lsp.enable('eslint')
+      vim.lsp.enable('html')
+      vim.lsp.enable('cssls')
+      vim.lsp.enable('jsonls')
 
       -- Use LspAttach autocommand to only map the following keys
       -- after the language server attaches to the current buffer
@@ -91,6 +196,17 @@ return {
       -- 不同语言的格式化配置
       formatters_by_ft = {
         lua = { "stylua" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        javascript = { "prettier" },
+        javascriptreact = { "prettier" },
+        vue = { "prettier" }, -- 新增 Vue 格式化支持
+        html = { "prettier" },
+        css = { "prettier" },
+        scss = { "prettier" },
+        less = { "prettier" },
+        json = { "prettier" },
+        jsonc = { "prettier" },
         -- Use the "_" filetype to run formatters on filetypes that don't
         -- have other formatters configured.
         ["_"] = { "trim_whitespace" },
@@ -120,20 +236,24 @@ return {
           :map("<leader>tf")
     end,
   },
-  -- 代码静态检查, 这里只检查拼写
+  -- 代码静态检查
   {
     "mfussenegger/nvim-lint",
     event = "BufWritePost",
     config = function()
+      require("lint").linters_by_ft = {
+        typescript = { "eslint", "codespell" },
+        typescriptreact = { "eslint", "codespell" },
+        javascript = { "eslint", "codespell" },
+        javascriptreact = { "eslint", "codespell" },
+        vue = { "eslint", "codespell" }, -- 新增 Vue 代码检查支持
+      }
+
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         callback = function()
           -- try_lint without arguments runs the linters defined in `linters_by_ft`
           -- for the current filetype
           require("lint").try_lint()
-
-          -- You can call `try_lint` with a linter name or a list of names to always
-          -- run specific linters, independent of the `linters_by_ft` configuration
-          require("lint").try_lint("codespell")
         end,
       })
     end,
