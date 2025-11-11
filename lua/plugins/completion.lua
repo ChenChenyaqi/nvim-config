@@ -6,7 +6,8 @@ return {
       -- 'rafamadriz/friendly-snippets'
       "nvim-tree/nvim-web-devicons",
       "onsails/lspkind.nvim",
-      "fang2hou/blink-copilot"
+      "fang2hou/blink-copilot",
+      "folke/lazydev.nvim",
     },
 
     -- use a release tag to download pre-built binaries
@@ -45,13 +46,16 @@ return {
         ["<Tab>"] = { function(cmp) return cmp.accept() end, "fallback", },
         ["<CR>"] = { function(cmp) return cmp.accept() end, "fallback", },
         -- Close current completion and insert a newline
-        ["<S-CR>"] = { function(cmp) cmp.hide() return false end, "fallback", },
+        ["<S-CR>"] = { function(cmp)
+          cmp.hide()
+          return false
+        end, "fallback", },
 
         -- Show/Remove completion
         ["<A-/>"] = { function(cmp) if cmp.is_menu_visible() then return cmp.hide() else return cmp.show() end end, "fallback", },
 
-        ["<A-n>"] = { function(cmp) cmp.show({ providers = {"buffer"} }) end, },
-        ["<A-p>"] = { function(cmp) cmp.show({ providers = {"buffer"} }) end, },
+        ["<A-n>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
+        ["<A-p>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
       },
 
       appearance = {
@@ -68,7 +72,7 @@ return {
           if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
             return { "buffer" }
           else
-            return { "copilot", "lsp", "path", "snippets", "buffer" }
+            return { "lazydev", "copilot", "lsp", "path", "snippets", "buffer" }
           end
         end,
         per_filetype = {
@@ -76,6 +80,12 @@ return {
         },
 
         providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            -- make lazydev completions top priority (see `:h blink.cmp`)
+            score_offset = 95,
+          },
           copilot = {
             name = "copilot",
             module = "blink-copilot",
@@ -256,7 +266,10 @@ return {
           ["<C-p>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
           ["<C-n>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
           ["<Tab>"] = { function(cmp) return cmp.accept() end, "fallback", },
-          ["<CR>"] = { function(cmp) if vim.fn.getcmdtype() == ":" then return cmp.accept_and_enter() end return false end, "fallback", },
+          ["<CR>"] = { function(cmp)
+            if vim.fn.getcmdtype() == ":" then return cmp.accept_and_enter() end
+            return false
+          end, "fallback", },
           ["<A-/>"] = { function(cmp) if cmp.is_menu_visible() then return cmp.hide() else return cmp.show() end end, "fallback", },
         },
       },

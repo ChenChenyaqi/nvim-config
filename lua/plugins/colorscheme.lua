@@ -21,9 +21,13 @@ return {
         gitsigns = true,
         mason = true,
         noice = true,
-        notify = true,
         nvimtree = true,
         rainbow_delimiters = true,
+        snacks = {
+          enabled = true,
+          indent_scope_color = "flamingo", -- catppuccin color (eg. `lavender`) Default: text
+        },
+        which_key = true,
       }
     },
     config = function(_, opts)
@@ -33,4 +37,3 @@ return {
     end
   },
 }
-

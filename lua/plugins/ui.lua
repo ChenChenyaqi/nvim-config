@@ -16,8 +16,8 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     dependencies = {
-       'nvim-tree/nvim-web-devicons',
-       "AndreM222/copilot-lualine" ,
+      'nvim-tree/nvim-web-devicons',
+      "AndreM222/copilot-lualine",
     },
     opts = {
       options = {
@@ -39,7 +39,7 @@ return {
           "filename"
         },
         lualine_b = {
-          { function() return " " end, color = 'Comment'},
+          { function() return " " end, color = 'Comment' },
         },
         lualine_x = {
           "lsp_status"
@@ -103,20 +103,19 @@ return {
     init = function() vim.g.barbar_auto_setup = false end,
     event = { "VeryLazy" },
     keys = {
-      { "<A-<>", "<CMD>BufferMovePrevious<CR>", mode = {"n"}, desc = "[Buffer] Move buffer left"  },
-      { "<A->>", "<CMD>BufferMoveNext<CR>",     mode = {"n"}, desc = "[Buffer] Move buffer right" },
-      { "<A-1>", "<CMD>BufferGoto 1<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 1"    },
-      { "<A-2>", "<CMD>BufferGoto 2<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 2"    },
-      { "<A-3>", "<CMD>BufferGoto 3<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 3"    },
-      { "<A-4>", "<CMD>BufferGoto 4<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 4"    },
-      { "<A-5>", "<CMD>BufferGoto 5<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 5"    },
-      { "<A-6>", "<CMD>BufferGoto 6<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 6"    },
-      { "<A-7>", "<CMD>BufferGoto 7<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 7"    },
-      { "<A-8>", "<CMD>BufferGoto 8<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 8"    },
-      { "<A-9>", "<CMD>BufferGoto 9<CR>",       mode = {"n"}, desc = "[Buffer] Go to buffer 9"    },
-      { "<A-h>", "<CMD>BufferPrevious<CR>",     mode = {"n"}, desc = "[Buffer] Previous buffer"   },
-      { "<A-l>", "<CMD>BufferNext<CR>",         mode = {"n"}, desc = "[Buffer] Next buffer"       },
-      { "<A-w>", "<CMD>BufferClose<CR>",        mode = {"n"}, desc = "Close buffer"               },
+      { "<A-<>", "<CMD>BufferMovePrevious<CR>", mode = { "n" }, desc = "[Buffer] Move buffer left" },
+      { "<A->>", "<CMD>BufferMoveNext<CR>",     mode = { "n" }, desc = "[Buffer] Move buffer right" },
+      { "<A-1>", "<CMD>BufferGoto 1<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 1" },
+      { "<A-2>", "<CMD>BufferGoto 2<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 2" },
+      { "<A-3>", "<CMD>BufferGoto 3<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 3" },
+      { "<A-4>", "<CMD>BufferGoto 4<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 4" },
+      { "<A-5>", "<CMD>BufferGoto 5<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 5" },
+      { "<A-6>", "<CMD>BufferGoto 6<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 6" },
+      { "<A-7>", "<CMD>BufferGoto 7<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 7" },
+      { "<A-8>", "<CMD>BufferGoto 8<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 8" },
+      { "<A-9>", "<CMD>BufferGoto 9<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 9" },
+      { "<A-h>", "<CMD>BufferPrevious<CR>",     mode = { "n" }, desc = "[Buffer] Previous buffer" },
+      { "<A-l>", "<CMD>BufferNext<CR>",         mode = { "n" }, desc = "[Buffer] Next buffer" },
     },
     opts = {
       animation = false,
@@ -138,7 +137,7 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
     keys = {
-      { "<leader>e", "<CMD>NvimTreeToggle<CR>", mode = {"n"}, desc = "[NvimTree] Toggle NvimTree" },
+      { "<leader>e", "<CMD>NvimTreeToggle<CR>", mode = { "n" }, desc = "[NvimTree] Toggle NvimTree" },
     },
     opts = {}
   },
@@ -159,38 +158,40 @@ return {
       -- OPTIONAL:
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
-      {"rcarriga/nvim-notify", opts = {background_colour = "#000000"}}
+      -- {"rcarriga/nvim-notify", opts = {background_colour = "#000000"}}
     },
     keys = {
       { "<leader>sN", "<CMD>Noice pick<CR>", desc = "[Noice] Pick history messages" }, -- FIXME: Currently unusable
-      { "<leader>N", "<CMD>Noice<CR>", desc = "[Noice] Show history messages" },
+      { "<leader>N",  "<CMD>Noice<CR>",      desc = "[Noice] Show history messages" },
     },
 
     opts = {
       popupmenu = {
         enabled = false,
       },
+      notify = {
+        enabled = false,
+      },
       lsp = {
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
         override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+          ["vim.lsp.util.stylize_markdown"] = false,
         },
       },
       -- you can enable a preset for easier configuration
       presets = {
-        bottom_search = false, -- use a classic bottom cmdline for search
-        command_palette = true, -- position the cmdline and popupmenu together
+        bottom_search = false,        -- use a classic bottom cmdline for search
+        command_palette = true,       -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
-        inc_rename = false, -- enables an input dialog for inc-rename.nvim
-        lsp_doc_border = true, -- add a border to hover docs and signature help
+        inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = true,        -- add a border to hover docs and signature help
       },
       routes = {
         -- Hide search count
         { filter = { event = "msg_show", kind = "search_count", }, opts = { skip = true }, },
         -- Hide written message
-        { filter = { event = "msg_show", kind = "", }, opts = { skip = true }, },
+        { filter = { event = "msg_show", kind = "", },             opts = { skip = true }, },
       },
     }
   },
@@ -200,6 +201,34 @@ return {
     event = "VeryLazy",
     version = "*",
     opts = {},
+  },
+
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      ---@type false | "classic" | "modern" | "helix"
+      preset = "helix",
+      win = {
+        -- no_overlap = true,
+        title = false,
+        width = 0.5,
+      },
+      -- stylua: ignore
+      spec = {
+        { "<leader>s", group = "<Snacks>" },
+        { "<leader>t", group = "<Snacks> Toggle" },
+      },
+      -- expand all nodes wighout a description
+      expand = function(node)
+        return not node.desc
+      end,
+    },
+    keys = {
+      -- stylua: ignore
+      { "<leader>?", function() require("which-key").show({ global = false }) end, desc = "[Which-key] Buffer Local Keymaps", },
+    },
   },
 
 }
