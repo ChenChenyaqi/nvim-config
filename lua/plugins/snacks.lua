@@ -185,7 +185,7 @@ return {
           _G.bt = function()
             Snacks.debug.backtrace()
           end
-          vim.print = _G.dd -- Override print to use snacks for `:=` command
+          vim.print = _G.dd   -- Override print to use snacks for `:=` command
 
           Snacks.toggle.new({
             id = "Animation",
@@ -222,7 +222,7 @@ return {
           Snacks.toggle.diagnostics():map("<leader>td")
           Snacks.toggle.line_number():map("<leader>tl")
           Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map(
-            "<leader>tc")
+          "<leader>tc")
           Snacks.toggle.treesitter():map("<leader>tT")
           Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>tb")
           Snacks.toggle.inlay_hints():map("<leader>th")
