@@ -52,7 +52,7 @@ return {
 
       -- 获取 vue-language-server 路径（使用标准 Mason 路径）
       local vue_language_server_path = vim.fn.stdpath('data') ..
-      '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+          '/mason/packages/vue-language-server/node_modules/@vue/language-server'
 
       -- Lua LS 配置
       vim.lsp.config('lua_ls', {
@@ -125,13 +125,6 @@ return {
       -- ESLint LSP 配置
       vim.lsp.config('eslint', {
         capabilities = capabilities,
-        on_attach = function(client, bufnr)
-          -- 确保 ESLint 只对支持的文件类型工作
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            command = "EslintFixAll",
-          })
-        end,
         settings = {
           -- 使用项目中的 ESLint 配置
           useESLintClass = false,
