@@ -1,3 +1,12 @@
+-- blink.cmp 自动补全插件配置
+-- 基于 Rust 的高性能 Neovim 补全引擎，支持多种补全源和智能补全
+-- 主要功能：
+--   - 多源补全：LSP、Copilot、路径、代码片段、缓冲区等
+--   - 高性能模糊匹配：基于 Rust 的快速匹配算法
+--   - 智能上下文感知：根据代码位置自动调整补全源
+--   - 丰富的快捷键映射：支持多种操作模式
+--   - 美观的 UI：可自定义的补全菜单和文档窗口
+
 return {
   {
     "saghen/blink.cmp",
@@ -20,6 +29,7 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      -- 按键映射配置 - 定义补全菜单的各种操作快捷键
       -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
       -- 'super-tab' for mappings similar to vscode (tab to accept)
       -- 'enter' for enter to accept
@@ -34,6 +44,8 @@ return {
       -- See :h blink-cmp-config-keymap for defining your own keymap
       -- stylua: ignore
       keymap = {
+        -- 自定义按键映射 - 如果命令/函数返回 false 或 nil，将运行下一个命令/函数
+        -- 预设模式：none（无预设映射，完全自定义）
         -- If the command/function returns false or nil, the next command/function will be run.
         preset = "none",
         ["<A-j>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
@@ -59,20 +71,24 @@ return {
         ["<A-p>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
       },
 
+      -- 外观配置 - 控制补全菜单的视觉样式
       appearance = {
-        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-        -- Adjusts spacing to ensure icons are aligned
+        -- 'mono' (默认) 使用 'Nerd Font Mono' 或 'normal' 使用 'Nerd Font'
+        -- 调整间距以确保图标对齐
         nerd_font_variant = "normal",
       },
 
-      -- Default list of enabled providers defined so that you can extend it
-      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      -- 补全源配置 - 定义启用哪些补全源及其优先级
+      -- 默认启用的补全源列表，可以通过 `opts_extend` 在其他地方扩展而不需要重新定义
       sources = {
+        -- 默认补全源 - 智能根据代码上下文选择补全源
         default = function()
           local success, node = pcall(vim.treesitter.get_node)
+          -- 如果在注释中，只显示缓冲区补全
           if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
             return { "buffer" }
           else
+            -- 正常代码中显示完整补全源
             return { "lazydev", "copilot", "lsp", "path", "snippets", "buffer" }
           end
         end,
@@ -80,57 +96,65 @@ return {
           codecompanion = { "codecompanion" },
         },
 
+        -- 补全提供者配置 - 为每个补全源设置具体参数
         providers = {
+          -- LazyDev 补全源 - Lua 开发辅助工具，提供插件配置补全
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
-            -- make lazydev completions top priority (see `:h blink.cmp`)
+            -- 使 lazydev 补全具有最高优先级（参见 `:h blink.cmp`）
             score_offset = 95,
           },
+          -- GitHub Copilot 补全源 - AI 代码补全
           copilot = {
             name = "copilot",
             module = "blink-copilot",
-            score_offset = 100,
-            async = true,
+            score_offset = 100,  -- 最高优先级
+            async = true,        -- 异步补全
             opts = {
-              kind_icon = "",
-              kind_hl = "DevIconCopilot",
+              kind_icon = "",      -- Copilot 图标
+              kind_hl = "DevIconCopilot",  -- 高亮组
             },
           },
+          -- 路径补全源 - 文件路径自动补全
           path = {
-            score_offset = 95,
+            score_offset = 95,  -- 高优先级
             opts = {
               get_cwd = function(_)
-                return vim.fn.getcwd()
+                return vim.fn.getcwd()  -- 获取当前工作目录
               end,
             },
           },
+          -- 缓冲区补全源 - 当前文件中的文本补全
           buffer = {
-            score_offset = 20,
+            score_offset = 20,  -- 较低优先级
           },
+          -- LSP 补全源 - 语言服务器协议提供的智能补全
           lsp = {
-            -- Default
-            -- Filter text items from the LSP provider, since we have the buffer provider for that
+            -- 从 LSP 提供者中过滤掉文本类型的补全项，因为已经有缓冲区提供者处理文本
             transform_items = function(_, items)
               return vim.tbl_filter(function(item)
                 return item.kind ~= require("blink.cmp.types").CompletionItemKind.Text
               end, items)
             end,
-            score_offset = 60,
-            fallbacks = { "buffer" },
+            score_offset = 60,        -- 中等优先级
+            fallbacks = { "buffer" },  -- 回退到缓冲区补全
           },
-          -- Hide snippets after trigger character
-          -- Trigger characters are defined by the sources. For example, for Lua, the trigger characters are ., ", '.
+          -- 代码片段补全源 - 预定义的代码模板
+          -- 在触发字符后隐藏代码片段（避免重复显示）
+          -- 触发字符由源定义。例如，对于 Lua，触发字符是 ., ", '.
           snippets = {
-            score_offset = 70,
+            score_offset = 70,  -- 较高优先级
             should_show_items = function(ctx)
+              -- 不在触发字符后显示代码片段
               return ctx.trigger.initial_kind ~= "trigger_character"
             end,
-            fallbacks = { "buffer" },
+            fallbacks = { "buffer" },  -- 回退到缓冲区补全
           },
+          -- 命令行补全源 - 在命令行模式下的补全
           cmdline = {
-            min_keyword_length = 2,
-            -- Ignores cmdline completions when executing shell commands
+            min_keyword_length = 2,  -- 最小关键字长度
+            -- 在执行 shell 命令时忽略命令行补全
             enabled = function()
               return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
             end,
@@ -138,28 +162,32 @@ return {
         },
       },
 
-      -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-      -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-      -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+      -- 模糊匹配配置 - 提供拼写容错和显著更好的性能
+      -- （默认）使用 Rust 实现的模糊匹配器
+      -- 你可以使用 `implementation = "lua"` 来使用 Lua 实现，或者使用 `implementation = "prefer_rust"`
+      -- 在 Rust 模糊匹配器不可用时回退到 Lua 实现
       --
-      -- See the fuzzy documentation for more information
+      -- 参见模糊匹配文档获取更多信息
       fuzzy = {
-        implementation = "prefer_rust_with_warning",
+        implementation = "prefer_rust_with_warning",  -- 优先使用 Rust 实现，不可用时警告
         sorts = {
-          "exact",
-          -- defaults
-          "score",
-          "sort_text",
+          "exact",     -- 精确匹配
+          -- 默认排序方式
+          "score",      -- 匹配分数
+          "sort_text",  -- 排序文本
         },
       },
 
+      -- 补全行为配置 - 控制补全的接受和显示行为
       completion = {
-        -- NOTE: some LSPs may add auto brackets themselves anyway
-        accept = { auto_brackets = { enabled = true } },
-        list = { selection = { preselect = true, auto_insert = false } },
+        -- 注意：一些 LSP 可能会自己添加自动括号
+        accept = { auto_brackets = { enabled = true } },  -- 自动添加括号
+        list = { selection = { preselect = true, auto_insert = false } },  -- 预选但不自动插入
+        -- 补全菜单配置
         menu = {
-          border = "rounded",
-          max_height = 20,
+          border = "rounded",  -- 圆角边框
+          max_height = 20,      -- 最大高度
+          -- 绘制配置 - 定义补全菜单的列和组件
           draw = {
             columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
             components = {
@@ -198,10 +226,12 @@ return {
             },
           },
         },
+        -- 文档窗口配置 - 显示补全项的详细文档
         documentation = {
-          auto_show = true,
-          -- Delay before showing the documentation window
-          auto_show_delay_ms = 200,
+          auto_show = true,           -- 自动显示文档
+          -- 显示文档窗口前的延迟
+          auto_show_delay_ms = 200,   -- 200 毫秒延迟
+          -- 文档窗口配置
           window = {
             min_width = 10,
             max_width = 120,
@@ -220,22 +250,24 @@ return {
             },
           },
         },
-        -- Displays a preview of the selected item on the current line
+        -- 幽灵文本配置 - 在当前行显示选中项的预览
         ghost_text = {
-          enabled = true,
-          -- Show the ghost text when an item has been selected
+          enabled = true,                    -- 启用幽灵文本
+          -- 当有项被选中时显示幽灵文本
           show_with_selection = true,
-          -- Show the ghost text when no item has been selected, defaulting to the first item
+          -- 当没有项被选中时显示幽灵文本，默认为第一项
           show_without_selection = false,
-          -- Show the ghost text when the menu is open
+          -- 当菜单打开时显示幽灵文本
           show_with_menu = true,
-          -- Show the ghost text when the menu is closed
+          -- 当菜单关闭时显示幽灵文本
           show_without_menu = true,
         },
       },
 
+      -- 签名帮助配置 - 函数签名提示
       signature = {
-        enabled = true,
+        enabled = true,  -- 启用签名帮助
+        -- 签名帮助窗口配置
         window = {
           min_width = 1,
           max_width = 100,
@@ -254,15 +286,16 @@ return {
         },
       },
 
+      -- 命令行补全配置 - 在命令行模式下的补全行为
       cmdline = {
         completion = {
           menu = {
-            auto_show = true,
+            auto_show = true,  -- 自动显示补全菜单
           },
         },
         -- stylua: ignore
         keymap = {
-          preset = "none",
+          preset = "none",  -- 无预设映射，完全自定义
           ["<A-j>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
           ["<A-k>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
           ["<C-p>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
@@ -277,6 +310,7 @@ return {
       },
     },
 
-    opts_extend = { "sources.default" },
+    -- 配置扩展选项 - 允许在其他地方扩展这些配置而不需要重新定义
+    opts_extend = { "sources.default" },  -- 允许扩展默认补全源
   },
 }

@@ -1,16 +1,19 @@
+-- LSP 插件配置 - 语言服务器协议、格式化、代码检查和诊断工具
 return {
+  -- Mason 插件 - LSP 服务器和工具管理器
   {
     "williamboman/mason.nvim",
     opts = {
+      -- 确保安装的语言服务器和工具
       ensure_installed = {
-        "lua-language-server",
-        "typescript-language-server", -- TypeScript LSP
-        "vue-language-server",        -- Vue LSP (新增)
+        "lua-language-server",     -- Lua 语言服务器
+        "typescript-language-server", -- TypeScript 语言服务器
+        "vue-language-server",        -- Vue 语言服务器
         "eslint-lsp",                 -- ESLint LSP
-        "prettier",                   -- prettier
-        "html-lsp",                   -- HTML LSP
-        "css-lsp",                    -- CSS LSP
-        "json-lsp",                   -- JSON LSP
+        "prettier",                   -- prettier 代码格式化工具
+        "html-lsp",                   -- HTML 语言服务器
+        "css-lsp",                    -- CSS 语言服务器
+        "json-lsp",                   -- JSON 语言服务器
       },
     },
     config = function(_, opts)
@@ -31,23 +34,26 @@ return {
       end
     end,
   },
+  -- nvim-lspconfig - LSP 客户端配置
   {
     "neovim/nvim-lspconfig",
     dependencies = { "saghen/blink.cmp", "williamboman/mason.nvim" },
 
-    -- example calling setup directly for each LSP
+    -- 为每个 LSP 服务器直接配置
     config = function()
+      -- 诊断信息显示配置
       vim.diagnostic.config({
-        underline = false,
-        signs = false,
-        update_in_insert = false,
-        virtual_text = { spacing = 2, prefix = "●" },
-        severity_sort = true,
+        underline = false,           -- 不显示下划线
+        signs = false,               -- 不显示侧边栏标记
+        update_in_insert = false,    -- 插入模式不更新诊断
+        virtual_text = { spacing = 2, prefix = "●" }, -- 虚拟文本显示
+        severity_sort = true,        -- 按严重程度排序
         float = {
-          border = "rounded",
+          border = "rounded",        -- 浮动窗口圆角边框
         },
       })
 
+      -- 获取 LSP 能力（来自补全插件）
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
       -- 获取 vue-language-server 路径（使用标准 Mason 路径）
@@ -128,7 +134,7 @@ return {
         settings = {
           -- 使用项目中的 ESLint 配置
           useESLintClass = false,
-          run = "onType",
+          run = "onType",           -- 输入时运行
           problems = {
             shortenToSingleLine = false,
           },
@@ -144,12 +150,11 @@ return {
       vim.lsp.enable('cssls')
       vim.lsp.enable('jsonls')
 
-      -- Use LspAttach autocommand to only map the following keys
-      -- after the language server attaches to the current buffer
+      -- LSP 快捷键映射 - 当语言服务器附加到当前缓冲区时
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          vim.keymap.set("n", "gh", vim.lsp.buf.hover)
+          vim.keymap.set("n", "gh", vim.lsp.buf.hover)  -- 悬停显示文档
           vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {
             buffer = ev.buf,
             desc = "[LSP] Show diagnostic",
@@ -170,44 +175,43 @@ return {
       })
     end,
   },
+  -- lazydev.nvim - Lua 开发辅助工具
   {
     "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
+    ft = "lua", -- 只在 lua 文件加载
     opts = {
       library = {
-        -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
+        -- 当找到 "vim.uv" 时加载 luvit 类型
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
       },
     },
   },
-  -- 格式化代码
+  -- conform.nvim - 代码格式化插件
   {
     "stevearc/conform.nvim",
-    event = "BufWritePre",
+    event = "BufWritePre",  -- 在保存前触发
     opts = {
       -- 不同语言的格式化配置
       formatters_by_ft = {
-        lua = { "stylua" },
-        typescript = { "prettier" },
-        typescriptreact = { "prettier" },
-        javascript = { "prettier" },
-        javascriptreact = { "prettier" },
-        vue = { "prettier" }, -- 新增 Vue 格式化支持
-        html = { "prettier" },
-        css = { "prettier" },
-        scss = { "prettier" },
-        less = { "prettier" },
-        json = { "prettier" },
-        jsonc = { "prettier" },
-        -- Use the "_" filetype to run formatters on filetypes that don't
-        -- have other formatters configured.
-        ["_"] = { "trim_whitespace" },
+        lua = { "stylua" },              -- Lua 使用 stylua
+        typescript = { "prettier" },     -- TypeScript 使用 prettier
+        typescriptreact = { "prettier" }, -- TypeScript React 使用 prettier
+        javascript = { "prettier" },     -- JavaScript 使用 prettier
+        javascriptreact = { "prettier" }, -- JavaScript React 使用 prettier
+        vue = { "prettier" },            -- Vue 使用 prettier
+        html = { "prettier" },           -- HTML 使用 prettier
+        css = { "prettier" },            -- CSS 使用 prettier
+        scss = { "prettier" },           -- SCSS 使用 prettier
+        less = { "prettier" },           -- Less 使用 prettier
+        json = { "prettier" },           -- JSON 使用 prettier
+        jsonc = { "prettier" },          -- JSONC 使用 prettier
+        -- 默认格式化器 - 用于没有配置的文件类型
+        ["_"] = { "trim_whitespace" },   -- 去除空白字符
       },
 
       -- 自动格式化开关
       format_on_save = function(_)
-        -- Disable with a global or buffer-local variable
+        -- 通过全局变量控制是否启用自动格式化
         if vim.g.enable_autoformat then
           return { timeout_ms = 500, lsp_format = "fallback" }
         end
@@ -226,36 +230,37 @@ return {
               vim.g.enable_autoformat = state
             end,
           })
-          :map("<leader>tf")
+          :map("<leader>tf")  -- <leader>tf 切换自动格式化
     end,
   },
-  -- 代码静态检查
+  -- nvim-lint - 代码静态检查插件
   {
     "mfussenegger/nvim-lint",
-    event = "BufWritePost",
+    event = "BufWritePost",  -- 在保存后触发
     config = function()
+      -- 不同语言的检查器配置
       require("lint").linters_by_ft = {
-        typescript = { "eslint", "codespell" },
-        typescriptreact = { "eslint", "codespell" },
-        javascript = { "eslint", "codespell" },
-        javascriptreact = { "eslint", "codespell" },
-        vue = { "eslint", "codespell" }, -- 新增 Vue 代码检查支持
+        typescript = { "eslint", "codespell" },      -- TypeScript 使用 ESLint 和拼写检查
+        typescriptreact = { "eslint", "codespell" }, -- TypeScript React 使用 ESLint 和拼写检查
+        javascript = { "eslint", "codespell" },      -- JavaScript 使用 ESLint 和拼写检查
+        javascriptreact = { "eslint", "codespell" }, -- JavaScript React 使用 ESLint 和拼写检查
+        vue = { "eslint", "codespell" },             -- Vue 使用 ESLint 和拼写检查
       }
 
+      -- 保存后自动运行代码检查
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         callback = function()
-          -- try_lint without arguments runs the linters defined in `linters_by_ft`
-          -- for the current filetype
+          -- try_lint 根据文件类型运行对应的检查器
           require("lint").try_lint()
         end,
       })
     end,
   },
-  -- 问题诊断列表
+  -- trouble.nvim - 问题诊断列表插件
   {
     "folke/trouble.nvim",
-    cmd = "Trouble",
-    -- stylua: ignore
+    cmd = "Trouble",  -- 命令模式加载
+    -- 快捷键配置
     keys = {
       { "<A-j>",      function() vim.diagnostic.jump({ count = 1 }) end,            mode = { "n" },                                           desc = "Go to next diagnostic" },
       { "<A-k>",      function() vim.diagnostic.jump({ count = -1 }) end,           mode = { "n" },                                           desc = "Go to previous diagnostic" },
@@ -265,6 +270,7 @@ return {
       { "<leader>gL", "<CMD>Trouble loclist toggle<CR>",                            desc = "[Trouble] Location List" },
       { "<leader>gq", "<CMD>Trouble qflist toggle<CR>",                             desc = "[Trouble] Quickfix List" },
 
+      -- 注释掉的快捷键（可选功能）
       -- { "grr", "<CMD>Trouble lsp_references focus=true<CR>",         mode = { "n" }, desc = "[Trouble] LSP references"                        },
       -- { "gD", "<CMD>Trouble lsp_declarations focus=true<CR>",        mode = { "n" }, desc = "[Trouble] LSP declarations"                      },
       -- { "gd", "<CMD>Trouble lsp_type_definitions focus=true<CR>",    mode = { "n" }, desc = "[Trouble] LSP type definitions"                  },
@@ -279,7 +285,7 @@ return {
             actions = require("trouble.sources.snacks").actions,
             win = {
               input = {
-                -- stylua: ignore
+                -- 快捷键配置
                 keys = {
                   ["<c-t>"] = { "trouble_open", mode = { "n", "i" }, },
                 },
@@ -290,19 +296,18 @@ return {
       end,
     },
     opts = {
-      focus = false,
-      warn_no_results = false,
-      open_no_results = true,
+      focus = false,           -- 不自动聚焦
+      warn_no_results = false, -- 无结果时不警告
+      open_no_results = true,  -- 无结果时打开窗口
       preview = {
-        type = "float",
-        relative = "editor",
-        border = "rounded",
-        title = "Preview",
-        title_pos = "center",
-        ---`row` and `col` values relative to the editor
-        position = { 0.3, 0.3 },
-        size = { width = 0.6, height = 0.5 },
-        zindex = 200,
+        type = "float",        -- 预览窗口类型
+        relative = "editor",   -- 相对于编辑器
+        border = "rounded",    -- 圆角边框
+        title = "Preview",     -- 预览标题
+        title_pos = "center",  -- 标题居中
+        position = { 0.3, 0.3 }, -- 位置
+        size = { width = 0.6, height = 0.5 }, -- 大小
+        zindex = 200,          -- 层级
       },
     },
 
@@ -314,12 +319,12 @@ return {
         title = false,
         filter = { range = true },
         format = "{kind_icon}{symbol.name:Normal}",
-        -- The following line is needed to fix the background color
-        -- Set it to the lualine section you want to use
+        -- 以下行用于修复背景颜色
+        -- 设置为要使用的 lualine 部分
         -- hl_group = "lualine_b_normal",
       })
 
-      -- Insert status into lualine
+      -- 将状态插入到 lualine
       opts = require("lualine").get_config()
       table.insert(opts.winbar.lualine_b, 1, {
         symbols.get,
