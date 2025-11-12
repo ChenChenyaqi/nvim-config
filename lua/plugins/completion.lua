@@ -109,25 +109,25 @@ return {
           copilot = {
             name = "copilot",
             module = "blink-copilot",
-            score_offset = 100,  -- 最高优先级
-            async = true,        -- 异步补全
+            score_offset = 100, -- 最高优先级
+            async = true, -- 异步补全
             opts = {
-              kind_icon = "",      -- Copilot 图标
-              kind_hl = "DevIconCopilot",  -- 高亮组
+              kind_icon = "", -- Copilot 图标
+              kind_hl = "DevIconCopilot", -- 高亮组
             },
           },
           -- 路径补全源 - 文件路径自动补全
           path = {
-            score_offset = 95,  -- 高优先级
+            score_offset = 95, -- 高优先级
             opts = {
               get_cwd = function(_)
-                return vim.fn.getcwd()  -- 获取当前工作目录
+                return vim.fn.getcwd() -- 获取当前工作目录
               end,
             },
           },
           -- 缓冲区补全源 - 当前文件中的文本补全
           buffer = {
-            score_offset = 20,  -- 较低优先级
+            score_offset = 20, -- 较低优先级
           },
           -- LSP 补全源 - 语言服务器协议提供的智能补全
           lsp = {
@@ -138,22 +138,22 @@ return {
               end, items)
             end,
             score_offset = 60,        -- 中等优先级
-            fallbacks = { "buffer" },  -- 回退到缓冲区补全
+            fallbacks = { "buffer" }, -- 回退到缓冲区补全
           },
           -- 代码片段补全源 - 预定义的代码模板
           -- 在触发字符后隐藏代码片段（避免重复显示）
           -- 触发字符由源定义。例如，对于 Lua，触发字符是 ., ", '.
           snippets = {
-            score_offset = 70,  -- 较高优先级
+            score_offset = 70, -- 较高优先级
             should_show_items = function(ctx)
               -- 不在触发字符后显示代码片段
               return ctx.trigger.initial_kind ~= "trigger_character"
             end,
-            fallbacks = { "buffer" },  -- 回退到缓冲区补全
+            fallbacks = { "buffer" }, -- 回退到缓冲区补全
           },
           -- 命令行补全源 - 在命令行模式下的补全
           cmdline = {
-            min_keyword_length = 2,  -- 最小关键字长度
+            min_keyword_length = 2, -- 最小关键字长度
             -- 在执行 shell 命令时忽略命令行补全
             enabled = function()
               return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
@@ -169,24 +169,24 @@ return {
       --
       -- 参见模糊匹配文档获取更多信息
       fuzzy = {
-        implementation = "prefer_rust_with_warning",  -- 优先使用 Rust 实现，不可用时警告
+        implementation = "prefer_rust_with_warning", -- 优先使用 Rust 实现，不可用时警告
         sorts = {
-          "exact",     -- 精确匹配
+          "exact",                                   -- 精确匹配
           -- 默认排序方式
-          "score",      -- 匹配分数
-          "sort_text",  -- 排序文本
+          "score",                                   -- 匹配分数
+          "sort_text",                               -- 排序文本
         },
       },
 
       -- 补全行为配置 - 控制补全的接受和显示行为
       completion = {
         -- 注意：一些 LSP 可能会自己添加自动括号
-        accept = { auto_brackets = { enabled = true } },  -- 自动添加括号
-        list = { selection = { preselect = true, auto_insert = false } },  -- 预选但不自动插入
+        accept = { auto_brackets = { enabled = true } },                  -- 自动添加括号
+        list = { selection = { preselect = true, auto_insert = false } }, -- 预选但不自动插入
         -- 补全菜单配置
         menu = {
-          border = "rounded",  -- 圆角边框
-          max_height = 20,      -- 最大高度
+          border = "rounded", -- 圆角边框
+          max_height = 20,    -- 最大高度
           -- 绘制配置 - 定义补全菜单的列和组件
           draw = {
             columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
@@ -228,9 +228,9 @@ return {
         },
         -- 文档窗口配置 - 显示补全项的详细文档
         documentation = {
-          auto_show = true,           -- 自动显示文档
+          auto_show = true,         -- 自动显示文档
           -- 显示文档窗口前的延迟
-          auto_show_delay_ms = 200,   -- 200 毫秒延迟
+          auto_show_delay_ms = 200, -- 200 毫秒延迟
           -- 文档窗口配置
           window = {
             min_width = 10,
@@ -252,7 +252,7 @@ return {
         },
         -- 幽灵文本配置 - 在当前行显示选中项的预览
         ghost_text = {
-          enabled = true,                    -- 启用幽灵文本
+          enabled = true, -- 启用幽灵文本
           -- 当有项被选中时显示幽灵文本
           show_with_selection = true,
           -- 当没有项被选中时显示幽灵文本，默认为第一项
@@ -266,7 +266,7 @@ return {
 
       -- 签名帮助配置 - 函数签名提示
       signature = {
-        enabled = true,  -- 启用签名帮助
+        enabled = true, -- 启用签名帮助
         -- 签名帮助窗口配置
         window = {
           min_width = 1,
@@ -290,12 +290,12 @@ return {
       cmdline = {
         completion = {
           menu = {
-            auto_show = true,  -- 自动显示补全菜单
+            auto_show = true, -- 自动显示补全菜单
           },
         },
         -- stylua: ignore
         keymap = {
-          preset = "none",  -- 无预设映射，完全自定义
+          preset = "none", -- 无预设映射，完全自定义
           ["<A-j>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
           ["<A-k>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
           ["<C-p>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
@@ -311,6 +311,6 @@ return {
     },
 
     -- 配置扩展选项 - 允许在其他地方扩展这些配置而不需要重新定义
-    opts_extend = { "sources.default" },  -- 允许扩展默认补全源
+    opts_extend = { "sources.default" }, -- 允许扩展默认补全源
   },
 }

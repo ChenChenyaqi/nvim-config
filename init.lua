@@ -67,16 +67,16 @@ require("keymapping")
 -- Snacks profiler
 -- Snacks 性能分析器
 if vim.env.PROF then
-	-- example for lazy.nvim
-	-- change this to the correct path for your plugin manager
-	-- 当设置 PROF 环境变量时，激活 snacks.nvim 性能分析器
-	local snacks = vim.fn.stdpath("data") .. "/lazy/snacks.nvim"
-	vim.opt.rtp:append(snacks)
-	require("snacks.profiler").startup({
-		startup = {
-			event = "VimEnter", -- stop profiler on this event. Defaults to `VimEnter`
-			-- event = "UIEnter",
-			-- event = "VeryLazy",
-		},
-	})
+  -- example for lazy.nvim
+  -- change this to the correct path for your plugin manager
+  -- 当设置 PROF 环境变量时，激活 snacks.nvim 性能分析器
+  local snacks = vim.fn.stdpath("data") .. "/lazy/snacks.nvim"
+  vim.opt.rtp:append(snacks)
+  require("snacks.profiler").startup({
+    startup = {
+      event = "VimEnter", -- stop profiler on this event. Defaults to `VimEnter`
+      -- event = "UIEnter",
+      -- event = "VeryLazy",
+    },
+  })
 end

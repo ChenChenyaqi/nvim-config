@@ -6,7 +6,7 @@ return {
     opts = {
       -- 确保安装的语言服务器和工具
       ensure_installed = {
-        "lua-language-server",     -- Lua 语言服务器
+        "lua-language-server",        -- Lua 语言服务器
         "typescript-language-server", -- TypeScript 语言服务器
         "vue-language-server",        -- Vue 语言服务器
         "eslint-lsp",                 -- ESLint LSP
@@ -43,13 +43,13 @@ return {
     config = function()
       -- 诊断信息显示配置
       vim.diagnostic.config({
-        underline = false,           -- 不显示下划线
-        signs = false,               -- 不显示侧边栏标记
-        update_in_insert = false,    -- 插入模式不更新诊断
+        underline = false, -- 不显示下划线
+        signs = false, -- 不显示侧边栏标记
+        update_in_insert = false, -- 插入模式不更新诊断
         virtual_text = { spacing = 2, prefix = "●" }, -- 虚拟文本显示
-        severity_sort = true,        -- 按严重程度排序
+        severity_sort = true, -- 按严重程度排序
         float = {
-          border = "rounded",        -- 浮动窗口圆角边框
+          border = "rounded", -- 浮动窗口圆角边框
         },
       })
 
@@ -134,7 +134,7 @@ return {
         settings = {
           -- 使用项目中的 ESLint 配置
           useESLintClass = false,
-          run = "onType",           -- 输入时运行
+          run = "onType", -- 输入时运行
           problems = {
             shortenToSingleLine = false,
           },
@@ -154,7 +154,7 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          vim.keymap.set("n", "gh", vim.lsp.buf.hover)  -- 悬停显示文档
+          vim.keymap.set("n", "gh", vim.lsp.buf.hover) -- 悬停显示文档
           vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {
             buffer = ev.buf,
             desc = "[LSP] Show diagnostic",
@@ -189,24 +189,24 @@ return {
   -- conform.nvim - 代码格式化插件
   {
     "stevearc/conform.nvim",
-    event = "BufWritePre",  -- 在保存前触发
+    event = "BufWritePre", -- 在保存前触发
     opts = {
       -- 不同语言的格式化配置
       formatters_by_ft = {
-        lua = { "stylua" },              -- Lua 使用 stylua
-        typescript = { "prettier" },     -- TypeScript 使用 prettier
+        lua = { "stylua" },               -- Lua 使用 stylua
+        typescript = { "prettier" },      -- TypeScript 使用 prettier
         typescriptreact = { "prettier" }, -- TypeScript React 使用 prettier
-        javascript = { "prettier" },     -- JavaScript 使用 prettier
+        javascript = { "prettier" },      -- JavaScript 使用 prettier
         javascriptreact = { "prettier" }, -- JavaScript React 使用 prettier
-        vue = { "prettier" },            -- Vue 使用 prettier
-        html = { "prettier" },           -- HTML 使用 prettier
-        css = { "prettier" },            -- CSS 使用 prettier
-        scss = { "prettier" },           -- SCSS 使用 prettier
-        less = { "prettier" },           -- Less 使用 prettier
-        json = { "prettier" },           -- JSON 使用 prettier
-        jsonc = { "prettier" },          -- JSONC 使用 prettier
+        vue = { "prettier" },             -- Vue 使用 prettier
+        html = { "prettier" },            -- HTML 使用 prettier
+        css = { "prettier" },             -- CSS 使用 prettier
+        scss = { "prettier" },            -- SCSS 使用 prettier
+        less = { "prettier" },            -- Less 使用 prettier
+        json = { "prettier" },            -- JSON 使用 prettier
+        jsonc = { "prettier" },           -- JSONC 使用 prettier
         -- 默认格式化器 - 用于没有配置的文件类型
-        ["_"] = { "trim_whitespace" },   -- 去除空白字符
+        ["_"] = { "trim_whitespace" },    -- 去除空白字符
       },
 
       -- 自动格式化开关
@@ -230,13 +230,13 @@ return {
               vim.g.enable_autoformat = state
             end,
           })
-          :map("<leader>tf")  -- <leader>tf 切换自动格式化
+          :map("<leader>tf") -- <leader>tf 切换自动格式化
     end,
   },
   -- nvim-lint - 代码静态检查插件
   {
     "mfussenegger/nvim-lint",
-    event = "BufWritePost",  -- 在保存后触发
+    event = "BufWritePost", -- 在保存后触发
     config = function()
       -- 不同语言的检查器配置
       require("lint").linters_by_ft = {
@@ -259,7 +259,7 @@ return {
   -- trouble.nvim - 问题诊断列表插件
   {
     "folke/trouble.nvim",
-    cmd = "Trouble",  -- 命令模式加载
+    cmd = "Trouble", -- 命令模式加载
     -- 快捷键配置
     keys = {
       { "<A-j>",      function() vim.diagnostic.jump({ count = 1 }) end,            mode = { "n" },                                           desc = "Go to next diagnostic" },
@@ -296,18 +296,18 @@ return {
       end,
     },
     opts = {
-      focus = false,           -- 不自动聚焦
-      warn_no_results = false, -- 无结果时不警告
-      open_no_results = true,  -- 无结果时打开窗口
+      focus = false,                          -- 不自动聚焦
+      warn_no_results = false,                -- 无结果时不警告
+      open_no_results = true,                 -- 无结果时打开窗口
       preview = {
-        type = "float",        -- 预览窗口类型
-        relative = "editor",   -- 相对于编辑器
-        border = "rounded",    -- 圆角边框
-        title = "Preview",     -- 预览标题
-        title_pos = "center",  -- 标题居中
-        position = { 0.3, 0.3 }, -- 位置
+        type = "float",                       -- 预览窗口类型
+        relative = "editor",                  -- 相对于编辑器
+        border = "rounded",                   -- 圆角边框
+        title = "Preview",                    -- 预览标题
+        title_pos = "center",                 -- 标题居中
+        position = { 0.3, 0.3 },              -- 位置
         size = { width = 0.6, height = 0.5 }, -- 大小
-        zindex = 200,          -- 层级
+        zindex = 200,                         -- 层级
       },
     },
 
