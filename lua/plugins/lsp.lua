@@ -56,90 +56,14 @@ return {
       -- 获取 LSP 能力（来自补全插件）
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-      -- 获取 vue-language-server 路径（使用标准 Mason 路径）
-      local vue_language_server_path = vim.fn.stdpath('data') ..
-          '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+      -- 从 lang 主入口获取所有 LSP 配置
+      local lang_config = require("lang")
+      local all_lsp_configs = lang_config.get_all_lsp_configs(capabilities)
 
-      -- Lua LS 配置
-      vim.lsp.config('lua_ls', {
-        capabilities = capabilities
-      })
-
-      -- TypeScript LSP 配置 (支持 Vue 文件)
-      vim.lsp.config('ts_ls', {
-        capabilities = capabilities,
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-        init_options = {
-          plugins = {
-            {
-              name = "@vue/typescript-plugin",
-              location = vue_language_server_path,
-              languages = { "vue" },
-            },
-          },
-        },
-        settings = {
-          typescript = {
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-          javascript = {
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-        },
-      })
-
-      -- Vue LSP 配置
-      vim.lsp.config('vue_ls', {
-        capabilities = capabilities,
-        filetypes = { 'vue' }
-      })
-
-      -- HTML LSP 配置
-      vim.lsp.config('html', {
-        capabilities = capabilities,
-        filetypes = { 'html' }
-      })
-
-      -- CSS LSP 配置
-      vim.lsp.config('cssls', {
-        capabilities = capabilities,
-        filetypes = { 'css', 'scss', 'less' }
-      })
-
-      -- JSON LSP 配置
-      vim.lsp.config('jsonls', {
-        capabilities = capabilities,
-        filetypes = { 'json', 'jsonc' }
-      })
-
-      -- ESLint LSP 配置
-      vim.lsp.config('eslint', {
-        capabilities = capabilities,
-        settings = {
-          -- 使用项目中的 ESLint 配置
-          useESLintClass = false,
-          run = "onType", -- 输入时运行
-          problems = {
-            shortenToSingleLine = false,
-          },
-        },
-      })
+      -- 配置所有 LSP 服务器
+      for _, lsp_config in ipairs(all_lsp_configs) do
+        vim.lsp.config(lsp_config[1], lsp_config[2])
+      end
 
       -- 启用所有配置的 LSP
       vim.lsp.enable('lua_ls')
@@ -190,33 +114,34 @@ return {
   {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- 在保存前触发
-    opts = {
-      -- 不同语言的格式化配置
-      formatters_by_ft = {
-        lua = { "stylua" },               -- Lua 使用 stylua
-        typescript = { "prettier" },      -- TypeScript 使用 prettier
-        typescriptreact = { "prettier" }, -- TypeScript React 使用 prettier
-        javascript = { "prettier" },      -- JavaScript 使用 prettier
-        javascriptreact = { "prettier" }, -- JavaScript React 使用 prettier
-        vue = { "prettier" },             -- Vue 使用 prettier
-        html = { "prettier" },            -- HTML 使用 prettier
-        css = { "prettier" },             -- CSS 使用 prettier
-        scss = { "prettier" },            -- SCSS 使用 prettier
-        less = { "prettier" },            -- Less 使用 prettier
-        json = { "prettier" },            -- JSON 使用 prettier
-        jsonc = { "prettier" },           -- JSONC 使用 prettier
+    opts = function()
+      -- 从 lang 主入口获取所有格式化配置
+      local lang_config = require("lang")
+      local all_formatting_config = lang_config.get_all_formatting_config()
+
+      -- 基础格式化配置
+      local formatters_by_ft = {
         -- 默认格式化器 - 用于没有配置的文件类型
         ["_"] = { "trim_whitespace" },    -- 去除空白字符
-      },
+      }
 
-      -- 自动格式化开关
-      format_on_save = function(_)
-        -- 通过全局变量控制是否启用自动格式化
-        if vim.g.enable_autoformat then
-          return { timeout_ms = 500, lsp_format = "fallback" }
-        end
-      end,
-    },
+      -- 合并所有语言格式化配置
+      for k, v in pairs(all_formatting_config) do
+        formatters_by_ft[k] = v
+      end
+
+      return {
+        formatters_by_ft = formatters_by_ft,
+
+        -- 自动格式化开关
+        format_on_save = function(_)
+          -- 通过全局变量控制是否启用自动格式化
+          if vim.g.enable_autoformat then
+            return { timeout_ms = 500, lsp_format = "fallback" }
+          end
+        end,
+      }
+    end,
     init = function()
       vim.g.enable_autoformat = true
       require("snacks").toggle
@@ -238,14 +163,12 @@ return {
     "mfussenegger/nvim-lint",
     event = "BufWritePost", -- 在保存后触发
     config = function()
+      -- 从 lang 主入口获取所有代码检查配置
+      local lang_config = require("lang")
+      local all_linting_config = lang_config.get_all_linting_config()
+
       -- 不同语言的检查器配置
-      require("lint").linters_by_ft = {
-        typescript = { "eslint", "codespell" },      -- TypeScript 使用 ESLint 和拼写检查
-        typescriptreact = { "eslint", "codespell" }, -- TypeScript React 使用 ESLint 和拼写检查
-        javascript = { "eslint", "codespell" },      -- JavaScript 使用 ESLint 和拼写检查
-        javascriptreact = { "eslint", "codespell" }, -- JavaScript React 使用 ESLint 和拼写检查
-        vue = { "eslint", "codespell" },             -- Vue 使用 ESLint 和拼写检查
-      }
+      require("lint").linters_by_ft = all_linting_config
 
       -- 保存后自动运行代码检查
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {

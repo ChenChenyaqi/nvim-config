@@ -1,0 +1,55 @@
+-- 语言配置主入口文件
+-- 统一管理所有编程语言的配置
+
+local M = {}
+
+-- 导入所有语言配置模块
+M.lua_config = require("lang.lua_config")
+M.web_config = require("lang.web_config")
+M.json_config = require("lang.json_config")
+
+-- 获取所有 LSP 配置
+M.get_all_lsp_configs = function(capabilities)
+  local vue_language_server_path = vim.fn.stdpath('data') ..
+      '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+
+  return {
+    -- Lua LSP
+    M.lua_config.get_lsp_config(capabilities),
+
+    -- Web 开发 LSP
+    M.web_config.get_ts_lsp_config(capabilities, vue_language_server_path),
+    M.web_config.get_vue_lsp_config(capabilities),
+    M.web_config.get_html_lsp_config(capabilities),
+    M.web_config.get_css_lsp_config(capabilities),
+    M.web_config.get_eslint_lsp_config(capabilities),
+
+    -- JSON LSP
+    M.json_config.get_json_lsp_config(capabilities),
+  }
+end
+
+-- 获取所有格式化配置
+M.get_all_formatting_config = function()
+  local configs = {}
+
+  -- 合并所有格式化配置
+  local function merge_configs(target, source)
+    for k, v in pairs(source) do
+      target[k] = v
+    end
+  end
+
+  merge_configs(configs, M.lua_config.get_formatting_config())
+  merge_configs(configs, M.web_config.get_web_formatting_config())
+  merge_configs(configs, M.json_config.get_json_formatting_config())
+
+  return configs
+end
+
+-- 获取所有代码检查配置
+M.get_all_linting_config = function()
+  return M.web_config.get_web_linting_config()
+end
+
+return M
