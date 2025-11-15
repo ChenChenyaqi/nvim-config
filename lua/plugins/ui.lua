@@ -543,6 +543,7 @@ return {
     -- stylua: ignore
     keys = {
       { "<leader>E",  "<CMD>Yazi<CR>",        desc = "[Yazi] open at the current file", mode = { "n", "v" } },
+      { "<leader>cw", "<CMD>Yazi cwd<CR>",    desc = "[Yazi] open in working directory"                     },
     },
     opts = {
       open_for_directories = false,
