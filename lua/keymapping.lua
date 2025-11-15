@@ -43,3 +43,8 @@ vim.keymap.set(
   "*:%s/<C-r><C-w>//gc<Left><Left><Left>",
   { desc = "Replace current word ignoring case", noremap = true }
 )
+
+-- 删除函数
+vim.keymap.set("n", "<leader>df", "V$%d", { desc = "Delete a function" })
+-- 复制函数
+vim.keymap.set("n", "<leader>cf", "V$%y", { desc = "Copy a function" })
