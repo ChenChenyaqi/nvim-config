@@ -6,14 +6,14 @@ return {
     opts = {
       -- 确保安装的语言服务器和工具
       ensure_installed = {
-        "lua-language-server",        -- Lua 语言服务器
+        "lua-language-server", -- Lua 语言服务器
         "typescript-language-server", -- TypeScript 语言服务器
-        "vue-language-server",        -- Vue 语言服务器
-        "eslint-lsp",                 -- ESLint LSP
-        "prettier",                   -- prettier 代码格式化工具
-        "html-lsp",                   -- HTML 语言服务器
-        "css-lsp",                    -- CSS 语言服务器
-        "json-lsp",                   -- JSON 语言服务器
+        "vue-language-server", -- Vue 语言服务器
+        "eslint-lsp", -- ESLint LSP
+        "prettier", -- prettier 代码格式化工具
+        "html-lsp", -- HTML 语言服务器
+        "css-lsp", -- CSS 语言服务器
+        "json-lsp", -- JSON 语言服务器
       },
     },
     config = function(_, opts)
@@ -66,35 +66,24 @@ return {
       end
 
       -- 启用所有配置的 LSP
-      vim.lsp.enable('lua_ls')
-      vim.lsp.enable('ts_ls')
-      vim.lsp.enable('vue_ls') -- 新增 Vue LSP
-      vim.lsp.enable('eslint')
-      vim.lsp.enable('html')
-      vim.lsp.enable('cssls')
-      vim.lsp.enable('jsonls')
+      vim.lsp.enable("lua_ls")
+      vim.lsp.enable("ts_ls")
+      vim.lsp.enable("vue_ls") -- 新增 Vue LSP
+      vim.lsp.enable("eslint")
+      vim.lsp.enable("html")
+      vim.lsp.enable("cssls")
+      vim.lsp.enable("jsonls")
 
       -- LSP 快捷键映射 - 当语言服务器附加到当前缓冲区时
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          vim.keymap.set("n", "gh", vim.lsp.buf.hover) -- 悬停显示文档
+          vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Hover show document" }) -- 悬停显示文档
           vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {
             buffer = ev.buf,
             desc = "[LSP] Show diagnostic",
           })
           vim.keymap.set("n", "<leader>gk", vim.lsp.buf.signature_help, { desc = "[LSP] Signature help" })
-          vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, { desc = "[LSP] Add workspace folder" })
-          vim.keymap.set(
-            "n",
-            "<leader>wr",
-            vim.lsp.buf.remove_workspace_folder,
-            { desc = "[LSP] Remove workspace folder" }
-          )
-          vim.keymap.set("n", "<leader>wl", function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-          end, { desc = "[LSP] List workspace folders" })
-          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = ev.buf, desc = "[LSP] Rename" })
         end,
       })
     end,
@@ -122,7 +111,7 @@ return {
       -- 基础格式化配置
       local formatters_by_ft = {
         -- 默认格式化器 - 用于没有配置的文件类型
-        ["_"] = { "trim_whitespace" },    -- 去除空白字符
+        ["_"] = { "trim_whitespace" }, -- 去除空白字符
       }
 
       -- 合并所有语言格式化配置
@@ -145,17 +134,17 @@ return {
     init = function()
       vim.g.enable_autoformat = true
       require("snacks").toggle
-          .new({
-            id = "auto_format",
-            name = "Auto format",
-            get = function()
-              return vim.g.enable_autoformat
-            end,
-            set = function(state)
-              vim.g.enable_autoformat = state
-            end,
-          })
-          :map("<leader>tf") -- <leader>tf 切换自动格式化
+        .new({
+          id = "auto_format",
+          name = "Auto format",
+          get = function()
+            return vim.g.enable_autoformat
+          end,
+          set = function(state)
+            vim.g.enable_autoformat = state
+          end,
+        })
+        :map("<leader>tf") -- <leader>tf 切换自动格式化
     end,
   },
   -- nvim-lint - 代码静态检查插件
@@ -185,13 +174,39 @@ return {
     cmd = "Trouble", -- 命令模式加载
     -- 快捷键配置
     keys = {
-      { "<A-j>",      function() vim.diagnostic.jump({ count = 1 }) end,            mode = { "n" },                                           desc = "Go to next diagnostic" },
-      { "<A-k>",      function() vim.diagnostic.jump({ count = -1 }) end,           mode = { "n" },                                           desc = "Go to previous diagnostic" },
-      { "<leader>gd", "<CMD>Trouble diagnostics toggle<CR>",                        desc = "[Trouble] Toggle buffer diagnostics" },
-      { "<leader>gs", "<CMD>Trouble symbols toggle focus=false<CR>",                desc = "[Trouble] Toggle symbols " },
-      { "<leader>gl", "<CMD>Trouble lsp toggle focus=false win.position=right<CR>", desc = "[Trouble] Toggle LSP definitions/references/...", },
-      { "<leader>gL", "<CMD>Trouble loclist toggle<CR>",                            desc = "[Trouble] Location List" },
-      { "<leader>gq", "<CMD>Trouble qflist toggle<CR>",                             desc = "[Trouble] Quickfix List" },
+      {
+        "<A-j>",
+        function()
+          vim.diagnostic.jump({ count = 1 })
+        end,
+        mode = { "n" },
+        desc = "Go to next diagnostic",
+      },
+      {
+        "<A-k>",
+        function()
+          vim.diagnostic.jump({ count = -1 })
+        end,
+        mode = { "n" },
+        desc = "Go to previous diagnostic",
+      },
+      {
+        "<leader>gd",
+        "<CMD>Trouble diagnostics toggle<CR>",
+        desc = "[Trouble] Toggle buffer diagnostics",
+      },
+      {
+        "<leader>gs",
+        "<CMD>Trouble symbols toggle focus=false<CR>",
+        desc = "[Trouble] Toggle symbols ",
+      },
+      {
+        "<leader>gl",
+        "<CMD>Trouble lsp toggle focus=false win.position=right<CR>",
+        desc = "[Trouble] Toggle LSP definitions/references/...",
+      },
+      { "<leader>gL", "<CMD>Trouble loclist toggle<CR>", desc = "[Trouble] Location List" },
+      { "<leader>gq", "<CMD>Trouble qflist toggle<CR>", desc = "[Trouble] Quickfix List" },
 
       -- 注释掉的快捷键（可选功能）
       -- { "grr", "<CMD>Trouble lsp_references focus=true<CR>",         mode = { "n" }, desc = "[Trouble] LSP references"                        },
@@ -210,7 +225,7 @@ return {
               input = {
                 -- 快捷键配置
                 keys = {
-                  ["<c-t>"] = { "trouble_open", mode = { "n", "i" }, },
+                  ["<c-t>"] = { "trouble_open", mode = { "n", "i" } },
                 },
               },
             },
@@ -219,18 +234,18 @@ return {
       end,
     },
     opts = {
-      focus = false,                          -- 不自动聚焦
-      warn_no_results = false,                -- 无结果时不警告
-      open_no_results = true,                 -- 无结果时打开窗口
+      focus = false, -- 不自动聚焦
+      warn_no_results = false, -- 无结果时不警告
+      open_no_results = true, -- 无结果时打开窗口
       preview = {
-        type = "float",                       -- 预览窗口类型
-        relative = "editor",                  -- 相对于编辑器
-        border = "rounded",                   -- 圆角边框
-        title = "Preview",                    -- 预览标题
-        title_pos = "center",                 -- 标题居中
-        position = { 0.3, 0.3 },              -- 位置
+        type = "float", -- 预览窗口类型
+        relative = "editor", -- 相对于编辑器
+        border = "rounded", -- 圆角边框
+        title = "Preview", -- 预览标题
+        title_pos = "center", -- 标题居中
+        position = { 0.3, 0.3 }, -- 位置
         size = { width = 0.6, height = 0.5 }, -- 大小
-        zindex = 200,                         -- 层级
+        zindex = 200, -- 层级
       },
     },
 
