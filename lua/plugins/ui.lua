@@ -138,7 +138,11 @@ return {
     keys = {
       { "<leader>e", "<CMD>NvimTreeToggle<CR>", mode = { "n" }, desc = "[NvimTree] Toggle NvimTree" },
     },
-    opts = {},
+    opts = {
+      view = {
+        width = 50,
+      },
+    },
   },
 
   {
