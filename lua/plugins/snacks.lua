@@ -161,7 +161,10 @@ return {
 
       -- 查找功能
       { "<leader>sb",      function() require("snacks").picker.buffers() end,               desc = "[Snacks] Buffers" },        -- leader+sb：缓冲区列表
-      { "<leader>sf",      function() require("snacks").picker.files() end,                 desc = "[Snacks] Find files" },     -- leader+sf：查找文件
+      { "<leader>sf",      function() require("snacks").picker.files({exclude = {
+        "**/node_modules/**",
+        "**/dist/**"
+      }}) end,                 desc = "[Snacks] Find files" },     -- leader+sf：查找文件
       { "<leader>sp",      function() require("snacks").picker.projects() end,              desc = "[Snacks] Projects" },       -- leader+sp：项目列表
       { "<leader>sr",      function() require("snacks").picker.recent() end,                desc = "[Snacks] Recent" },         -- leader+sr：最近文件
       { "<leader>sg",      function() require("snacks").picker.grep() end,                  desc = "[Snacks] Grep" }, -- leader+sg：全局 Grep
