@@ -145,6 +145,52 @@ return {
       update_focused_file = {
         enable = true,
       },
+      filters = {
+        git_ignored = false,
+      },
+      on_attach = function(bufnr)
+        local api = require("nvim-tree.api")
+
+        local function opts(desc)
+          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- 首先应用默认映射
+        api.config.mappings.default_on_attach(bufnr)
+
+        -- 自定义映射：按 l 键展开文件夹或打开文件
+        vim.keymap.set("n", "l", function()
+          local node = api.tree.get_node_under_cursor()
+          if node.type == "directory" then
+            if node.open then
+              -- 文件夹已展开，关闭它
+              api.node.open.edit()
+            else
+              -- 文件夹未展开，展开它
+              api.node.open.edit()
+            end
+          else
+            -- 是文件，在buffer中打开
+            api.node.open.edit()
+          end
+        end, opts("Edit or Open"))
+
+        -- 自定义映射：按 h 键收起文件夹或文件所在文件夹
+        vim.keymap.set("n", "h", function()
+          local node = api.tree.get_node_under_cursor()
+          if not node then
+            return
+          end
+
+          if node.type == "file" then
+            -- 如果是文件，收起其父文件夹
+            api.node.navigate.parent_close()
+          else
+            -- 如果是文件夹，收起当前文件夹
+            api.node.navigate.parent_close()
+          end
+        end, opts("Close Node or Parent"))
+      end,
     },
   },
 
