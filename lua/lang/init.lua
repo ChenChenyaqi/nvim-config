@@ -8,10 +8,26 @@ M.lua_config = require("lang.lua_config")
 M.web_config = require("lang.web_config")
 M.json_config = require("lang.json_config")
 
+M.lang_table = {
+  { "lua_ls", "ts_ls", "vue_ls", "eslint", "html", "cssls", "tailwindcss", "jsonls" },
+}
+
+M.ensure_installed = {
+  "lua-language-server",
+  "typescript-language-server",
+  "vue-language-server",
+  "eslint-lsp",
+  "prettier",
+  "html-lsp",
+  "css-lsp",
+  "tailwindcss-language-server",
+  "json-lsp",
+}
+
 -- 获取所有 LSP 配置
 M.get_all_lsp_configs = function(capabilities)
-  local vue_language_server_path = vim.fn.stdpath('data') ..
-      '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+  local vue_language_server_path = vim.fn.stdpath("data")
+    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 
   return {
     -- Lua LSP
@@ -22,6 +38,7 @@ M.get_all_lsp_configs = function(capabilities)
     M.web_config.get_vue_lsp_config(capabilities),
     M.web_config.get_html_lsp_config(capabilities),
     M.web_config.get_css_lsp_config(capabilities),
+    M.web_config.get_tailwind_lsp_config(capabilities),
     M.web_config.get_eslint_lsp_config(capabilities),
 
     -- JSON LSP

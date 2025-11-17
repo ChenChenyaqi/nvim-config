@@ -4,7 +4,7 @@ local M = {}
 -- 获取 TypeScript LSP 配置
 M.get_ts_lsp_config = function(capabilities, vue_language_server_path)
   return {
-    'ts_ls',
+    "ts_ls",
     {
       capabilities = capabilities,
       filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
@@ -41,47 +41,107 @@ M.get_ts_lsp_config = function(capabilities, vue_language_server_path)
           },
         },
       },
-    }
+    },
   }
 end
 
 -- 获取 Vue LSP 配置
 M.get_vue_lsp_config = function(capabilities)
   return {
-    'vue_ls',
+    "vue_ls",
     {
       capabilities = capabilities,
-      filetypes = { 'vue' }
-    }
+      filetypes = { "vue" },
+    },
   }
 end
 
 -- 获取 HTML LSP 配置
 M.get_html_lsp_config = function(capabilities)
   return {
-    'html',
+    "html",
     {
       capabilities = capabilities,
-      filetypes = { 'html' }
-    }
+      filetypes = { "html" },
+    },
   }
 end
 
 -- 获取 CSS LSP 配置
 M.get_css_lsp_config = function(capabilities)
   return {
-    'cssls',
+    "cssls",
     {
       capabilities = capabilities,
-      filetypes = { 'css', 'scss', 'less' }
-    }
+      filetypes = { "css", "scss", "less" },
+    },
+  }
+end
+
+-- Tailwindcss LSP配置
+M.get_tailwind_lsp_config = function(capabilities)
+  return {
+    "tailwindcss",
+    {
+      capabilities = capabilities,
+      filetypes = {
+        "html",
+        "css",
+        "scss",
+        "less",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "vue",
+      },
+      init_options = {
+        userLanguages = {
+          html = "html",
+          css = "css",
+          scss = "css",
+          less = "css",
+          javascript = "javascript",
+          javascriptreact = "javascriptreact",
+          typescript = "typescript",
+          typescriptreact = "typescriptreact",
+          vue = "html",
+        },
+      },
+      settings = {
+        tailwindCSS = {
+          includeLanguages = {
+            html = "html",
+            css = "css",
+            scss = "css",
+            less = "css",
+            javascript = "javascript",
+            javascriptreact = "javascriptreact",
+            typescript = "typescript",
+            typescriptreact = "typescriptreact",
+            vue = "html",
+          },
+          experimental = {
+            classRegex = {
+              "cva\\(([^)]*)\\)",
+              "cn\\(([^)]*)\\)",
+              "tw`([^`]*)`",
+              'tw="([^"]*)"',
+              'tw={"([^"}]*)"}',
+              "tw\\.\\w+`([^`]*)`",
+              "tw\\(.*?\\)`([^`]*)`",
+            },
+          },
+        },
+      },
+    },
   }
 end
 
 -- 获取 ESLint LSP 配置
 M.get_eslint_lsp_config = function(capabilities)
   return {
-    'eslint',
+    "eslint",
     {
       capabilities = capabilities,
       settings = {
@@ -92,7 +152,7 @@ M.get_eslint_lsp_config = function(capabilities)
           shortenToSingleLine = false,
         },
       },
-    }
+    },
   }
 end
 
@@ -107,7 +167,7 @@ M.get_web_formatting_config = function()
     html = { "prettier" },
     css = { "prettier" },
     scss = { "prettier" },
-    less = { "prettier" }
+    less = { "prettier" },
   }
 end
 
@@ -118,8 +178,9 @@ M.get_web_linting_config = function()
     typescriptreact = { "eslint", "codespell" },
     javascript = { "eslint", "codespell" },
     javascriptreact = { "eslint", "codespell" },
-    vue = { "eslint", "codespell" }
+    vue = { "eslint", "codespell" },
   }
 end
 
 return M
+

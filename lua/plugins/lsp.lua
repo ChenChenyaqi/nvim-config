@@ -3,19 +3,12 @@ return {
   -- Mason 插件 - LSP 服务器和工具管理器
   {
     "williamboman/mason.nvim",
-    opts = {
-      -- 确保安装的语言服务器和工具
-      ensure_installed = {
-        "lua-language-server", -- Lua 语言服务器
-        "typescript-language-server", -- TypeScript 语言服务器
-        "vue-language-server", -- Vue 语言服务器
-        "eslint-lsp", -- ESLint LSP
-        "prettier", -- prettier 代码格式化工具
-        "html-lsp", -- HTML 语言服务器
-        "css-lsp", -- CSS 语言服务器
-        "json-lsp", -- JSON 语言服务器
-      },
-    },
+    opts = function()
+      local lange_config = require("lang")
+      return {
+        ensure_installed = lange_config.ensure_installed,
+      }
+    end,
     config = function(_, opts)
       require("mason").setup(opts)
       local mr = require("mason-registry")
@@ -66,13 +59,9 @@ return {
       end
 
       -- 启用所有配置的 LSP
-      vim.lsp.enable("lua_ls")
-      vim.lsp.enable("ts_ls")
-      vim.lsp.enable("vue_ls") -- 新增 Vue LSP
-      vim.lsp.enable("eslint")
-      vim.lsp.enable("html")
-      vim.lsp.enable("cssls")
-      vim.lsp.enable("jsonls")
+      for _, lang_item in pairs(lang_config.lang_table) do
+        vim.lsp.enable(lang_item)
+      end
 
       -- LSP 快捷键映射 - 当语言服务器附加到当前缓冲区时
       vim.api.nvim_create_autocmd("LspAttach", {
