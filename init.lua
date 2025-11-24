@@ -63,6 +63,7 @@ require("config.lazy") -- Import `./lua/config/lazy.lua`
 
 -- 加载自定义按键映射
 require("keymapping")
+require("buffer-keymapping")
 
 -- Snacks profiler
 -- Snacks 性能分析器

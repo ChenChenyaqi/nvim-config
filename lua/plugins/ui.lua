@@ -273,6 +273,7 @@ return {
         { "<leader>t", group = "<Snacks> Toggle" },
         { "<leader>g", group = "<Snacks> Git actions" },
         { "<leader>p", group = "<Snacks> Session manage" },
+        { "<leader>b", group = "<Buffer> Buffer manage" },
       },
       -- expand all nodes wighout a description
       expand = function(node)
