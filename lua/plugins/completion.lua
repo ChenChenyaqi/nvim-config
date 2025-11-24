@@ -17,6 +17,7 @@ return {
       "onsails/lspkind.nvim",
       "fang2hou/blink-copilot",
       "folke/lazydev.nvim",
+      "rafamadriz/friendly-snippets",
     },
 
     -- use a release tag to download pre-built binaries
@@ -69,6 +70,10 @@ return {
 
         ["<A-n>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
         ["<A-p>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
+      },
+
+      snippets = {
+        preset = "default",
       },
 
       -- 外观配置 - 控制补全菜单的视觉样式
@@ -137,7 +142,7 @@ return {
                 return item.kind ~= require("blink.cmp.types").CompletionItemKind.Text
               end, items)
             end,
-            score_offset = 60,        -- 中等优先级
+            score_offset = 60, -- 中等优先级
             fallbacks = { "buffer" }, -- 回退到缓冲区补全
           },
           -- 代码片段补全源 - 预定义的代码模板
@@ -171,22 +176,22 @@ return {
       fuzzy = {
         implementation = "prefer_rust_with_warning", -- 优先使用 Rust 实现，不可用时警告
         sorts = {
-          "exact",                                   -- 精确匹配
+          "exact", -- 精确匹配
           -- 默认排序方式
-          "score",                                   -- 匹配分数
-          "sort_text",                               -- 排序文本
+          "score", -- 匹配分数
+          "sort_text", -- 排序文本
         },
       },
 
       -- 补全行为配置 - 控制补全的接受和显示行为
       completion = {
         -- 注意：一些 LSP 可能会自己添加自动括号
-        accept = { auto_brackets = { enabled = true } },                  -- 自动添加括号
+        accept = { auto_brackets = { enabled = true } }, -- 自动添加括号
         list = { selection = { preselect = true, auto_insert = false } }, -- 预选但不自动插入
         -- 补全菜单配置
         menu = {
           border = "rounded", -- 圆角边框
-          max_height = 20,    -- 最大高度
+          max_height = 20, -- 最大高度
           -- 绘制配置 - 定义补全菜单的列和组件
           draw = {
             columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
@@ -228,7 +233,7 @@ return {
         },
         -- 文档窗口配置 - 显示补全项的详细文档
         documentation = {
-          auto_show = true,         -- 自动显示文档
+          auto_show = true, -- 自动显示文档
           -- 显示文档窗口前的延迟
           auto_show_delay_ms = 200, -- 200 毫秒延迟
           -- 文档窗口配置
