@@ -81,3 +81,15 @@ if vim.env.PROF then
     },
   })
 end
+
+-- 创建一个自动命令，在任何文件类型加载后执行
+-- 移除o/回车自动带上注释符号
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    -- 使用 vim.schedule 将执行推迟到主循环之后
+    vim.schedule(function()
+      vim.opt_local.formatoptions:remove({ "o", "r" })
+    end)
+  end,
+})
