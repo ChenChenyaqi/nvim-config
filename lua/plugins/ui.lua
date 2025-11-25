@@ -609,4 +609,9 @@ return {
       vim.g.loaded_netrwPlugin = 1
     end,
   },
+
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf", -- 仅在打开 quickfix 时加载
+  },
 }

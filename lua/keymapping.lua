@@ -48,3 +48,18 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>df", "V$%d", { desc = "Delete a function" })
 -- 复制函数
 vim.keymap.set("n", "<leader>cf", "V$%y", { desc = "Copy a function" })
+
+-- 切换Quickfix list
+vim.keymap.set("n", "<leader>q", function()
+  local qf_exists = false
+  for _, win in pairs(vim.fn.getwininfo()) do
+    if win["quickfix"] == 1 then
+      qf_exists = true
+    end
+  end
+  if qf_exists then
+    vim.cmd("cclose")
+  else
+    vim.cmd("copen")
+  end
+end, { desc = "Toggle Quickfix List" })
