@@ -19,6 +19,8 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     local opts = { buffer = true, silent = true, desc = "Delete item from qflist" }
 
+    vim.api.nvim_win_set_height(0, 15)
+
     -- 绑定 'dd' 删除当前行
     vim.keymap.set("n", "dd", function()
       local list = vim.fn.getqflist() -- 获取当前列表
