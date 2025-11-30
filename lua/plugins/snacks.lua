@@ -188,7 +188,6 @@ return {
       { "<leader>sD",      function() require("snacks").picker.diagnostics_buffer() end,    desc = "[Snacks] Diagnostics buffer" },     -- leader+sD：缓冲区诊断
       { "<leader>sH",      function() require("snacks").picker.help() end,                  desc = "[Snacks] Help pages" },             -- leader+sH：帮助页面
       { "<leader>sh",      function() require("snacks").picker.highlights() end,            desc = "[Snacks] Highlights" },             -- leader+sh：高亮组
-      { "<leader>sI",      function() require("snacks").picker.icons() end,                 desc = "[Snacks] Icons" },                  -- leader+sI：图标
       { "<leader>sj",      function() require("snacks").picker.jumps() end,                 desc = "[Snacks] Jumps" },                  -- leader+sj：跳转列表
       { "<leader>sk",      function() require("snacks").picker.keymaps() end,               desc = "[Snacks] Keymaps" },                -- leader+sk：键盘映射
       { "<leader>sl",      function() require("snacks").picker.loclist() end,               desc = "[Snacks] Location list" },          -- leader+sl：位置列表
