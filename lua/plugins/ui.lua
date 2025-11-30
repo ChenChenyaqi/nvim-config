@@ -274,6 +274,7 @@ return {
         { "<leader>g", group = "<Snacks> Git actions" },
         { "<leader>p", group = "<Snacks> Session manage" },
         { "<leader>b", group = "<Buffer> Buffer manage" },
+        { "<leader>u", group = "<Test> Test Debug" },
       },
       -- expand all nodes wighout a description
       expand = function(node)
