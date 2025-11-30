@@ -135,4 +135,15 @@ return {
       end)
     end,
   },
+
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- 使用最新稳定版
+    event = "VeryLazy", -- 懒加载，非常快
+    config = function()
+      require("nvim-surround").setup({
+        -- 这里可以留空，使用默认配置即可支持 ysiw, cs"', ds" 等操作
+      })
+    end,
+  },
 }

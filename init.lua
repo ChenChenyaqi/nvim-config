@@ -25,7 +25,7 @@ vim.opt.sidescrolloff = 10
 vim.opt.startofline = false
 
 -- 隐藏语法元素如 Markdown 链接（级别2）
-vim.opt.conceallevel = 2
+vim.opt.conceallevel = 0
 
 -- 始终显示1列宽的标记列，用于诊断/git标记
 vim.o.signcolumn = "yes:1"
