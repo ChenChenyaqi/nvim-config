@@ -186,7 +186,7 @@ return {
       -- 补全行为配置 - 控制补全的接受和显示行为
       completion = {
         -- 注意：一些 LSP 可能会自己添加自动括号
-        accept = { auto_brackets = { enabled = true } }, -- 自动添加括号
+        accept = { auto_brackets = { enabled = false } }, -- 自动添加括号
         list = { selection = { preselect = false, auto_insert = false } }, -- 预选但不自动插入
         -- 补全菜单配置
         menu = {
