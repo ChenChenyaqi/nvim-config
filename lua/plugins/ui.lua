@@ -194,6 +194,18 @@ return {
     },
   },
 
+  --  文件操作自动更新引用
+  {
+    "antosha417/nvim-lsp-file-operations",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-tree.lua", -- 确保你有安装 nvim-tree
+    },
+    config = function()
+      require("lsp-file-operations").setup()
+    end,
+  },
+
   {
     "HiPhish/rainbow-delimiters.nvim",
     main = "rainbow-delimiters.setup",
