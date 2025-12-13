@@ -68,9 +68,9 @@ return {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
           vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Hover show document" }) -- 悬停显示文档
-          vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {
+          vim.keymap.set("n", "<leader>sd", "<cmd>Trouble diagnostics toggle filter.buf=0 focus=true<cr>", {
             buffer = ev.buf,
-            desc = "[LSP] Show diagnostic",
+            desc = "[Trouble] Buffer Diagnostics",
           })
           vim.keymap.set("n", "<leader>gk", vim.lsp.buf.signature_help, { desc = "[LSP] Signature help" })
           vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle focus=true<cr>", {

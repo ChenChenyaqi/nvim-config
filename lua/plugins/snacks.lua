@@ -184,8 +184,8 @@ return {
       { "<leader>sA",      function() require("snacks").picker.autocmds() end,              desc = "[Snacks] Autocmds" },               -- leader+sA：自动命令
       { "<leader>s:",      function() require("snacks").picker.command_history() end,       desc = "[Snacks] Command history" },        -- leader+s:：命令历史
       { "<leader>sc",      function() require("snacks").picker.commands() end,              desc = "[Snacks] Commands" },               -- leader+sc：命令列表
-      { "<leader>sd",      function() require("snacks").picker.diagnostics() end,           desc = "[Snacks] Diagnostics" },            -- leader+sd：诊断信息
-      { "<leader>sD",      function() require("snacks").picker.diagnostics_buffer() end,    desc = "[Snacks] Diagnostics buffer" },     -- leader+sD：缓冲区诊断
+      -- { "<leader>sd",      function() require("snacks").picker.diagnostics() end,           desc = "[Snacks] Diagnostics" },            -- leader+sd：诊断信息
+      -- { "<leader>sD",      function() require("snacks").picker.diagnostics_buffer() end,    desc = "[Snacks] Diagnostics buffer" },     -- leader+sD：缓冲区诊断
       { "<leader>sH",      function() require("snacks").picker.help() end,                  desc = "[Snacks] Help pages" },             -- leader+sH：帮助页面
       { "<leader>sh",      function() require("snacks").picker.highlights() end,            desc = "[Snacks] Highlights" },             -- leader+sh：高亮组
       { "<leader>sj",      function() require("snacks").picker.jumps() end,                 desc = "[Snacks] Jumps" },                  -- leader+sj：跳转列表
