@@ -1,7 +1,7 @@
 -- blink.cmp 自动补全插件配置
 -- 基于 Rust 的高性能 Neovim 补全引擎，支持多种补全源和智能补全
 -- 主要功能：
---   - 多源补全：LSP、Copilot、路径、代码片段、缓冲区等
+--   - 多源补全：LSP、路径、代码片段、缓冲区等
 --   - 高性能模糊匹配：基于 Rust 的快速匹配算法
 --   - 智能上下文感知：根据代码位置自动调整补全源
 --   - 丰富的快捷键映射：支持多种操作模式
@@ -15,61 +15,27 @@ return {
       -- 'rafamadriz/friendly-snippets'
       "nvim-tree/nvim-web-devicons",
       "onsails/lspkind.nvim",
-      "fang2hou/blink-copilot",
       "folke/lazydev.nvim",
       "rafamadriz/friendly-snippets",
     },
 
     -- use a release tag to download pre-built binaries
     version = "1.*",
-    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    -- build = 'cargo build --release',
-    -- If you use nix, you can build from source using latest nightly rust with:
-    -- build = 'nix run .#build-plugin',
-
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
       -- 按键映射配置 - 定义补全菜单的各种操作快捷键
-      -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-      -- 'super-tab' for mappings similar to vscode (tab to accept)
-      -- 'enter' for enter to accept
-      -- 'none' for no mappings
-      --
-      -- All presets have the following mappings:
-      -- C-space: Open menu or open docs if already open
-      -- C-n/C-p or Up/Down: Select next/previous item
-      -- C-e: Hide menu
-      -- C-k: Toggle signature help (if signature.enabled = true)
-      --
-      -- See :h blink-cmp-config-keymap for defining your own keymap
       -- stylua: ignore
       keymap = {
-        -- 自定义按键映射 - 如果命令/函数返回 false 或 nil，将运行下一个命令/函数
-        -- 预设模式：none（无预设映射，完全自定义）
-        -- If the command/function returns false or nil, the next command/function will be run.
         preset = "none",
         ["<A-j>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
         ["<A-k>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
-        ["<C-n>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
-        ["<C-p>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
-
-        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
 
         ["<Tab>"] = { function(cmp) return cmp.accept() end, "fallback", },
         ["<CR>"] = { function(cmp) return cmp.accept() end, "fallback", },
-        -- Close current completion and insert a newline
-        ["<S-CR>"] = { function(cmp)
-          cmp.hide()
-          return false
-        end, "fallback", },
 
         -- Show/Remove completion
         ["<A-/>"] = { function(cmp) if cmp.is_menu_visible() then return cmp.hide() else return cmp.show() end end, "fallback", },
-
-        ["<A-n>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
-        ["<A-p>"] = { function(cmp) cmp.show({ providers = { "buffer" } }) end, },
       },
 
       snippets = {
@@ -78,7 +44,6 @@ return {
 
       -- 外观配置 - 控制补全菜单的视觉样式
       appearance = {
-        -- 'mono' (默认) 使用 'Nerd Font Mono' 或 'normal' 使用 'Nerd Font'
         -- 调整间距以确保图标对齐
         nerd_font_variant = "normal",
       },
@@ -94,7 +59,7 @@ return {
             return { "buffer" }
           else
             -- 正常代码中显示完整补全源
-            return { "lazydev", "copilot", "lsp", "path", "snippets", "buffer" }
+            return { "lazydev", "lsp", "path", "snippets", "buffer" }
           end
         end,
         per_filetype = {
@@ -107,23 +72,11 @@ return {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
-            -- 使 lazydev 补全具有最高优先级（参见 `:h blink.cmp`）
-            score_offset = 95,
-          },
-          -- GitHub Copilot 补全源 - AI 代码补全
-          copilot = {
-            name = "copilot",
-            module = "blink-copilot",
-            score_offset = 100, -- 最高优先级
-            async = true, -- 异步补全
-            opts = {
-              kind_icon = "", -- Copilot 图标
-              kind_hl = "DevIconCopilot", -- 高亮组
-            },
+            score_offset = 95, -- 优先级
           },
           -- 路径补全源 - 文件路径自动补全
           path = {
-            score_offset = 95, -- 高优先级
+            score_offset = 95,
             opts = {
               get_cwd = function(_)
                 return vim.fn.getcwd() -- 获取当前工作目录
@@ -132,7 +85,7 @@ return {
           },
           -- 缓冲区补全源 - 当前文件中的文本补全
           buffer = {
-            score_offset = 20, -- 较低优先级
+            score_offset = 20,
           },
           -- LSP 补全源 - 语言服务器协议提供的智能补全
           lsp = {
@@ -142,7 +95,7 @@ return {
                 return item.kind ~= require("blink.cmp.types").CompletionItemKind.Text
               end, items)
             end,
-            score_offset = 60, -- 中等优先级
+            score_offset = 100,
             fallbacks = { "buffer" }, -- 回退到缓冲区补全
           },
           -- 代码片段补全源 - 预定义的代码模板
@@ -303,8 +256,6 @@ return {
           preset = "none", -- 无预设映射，完全自定义
           ["<A-j>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
           ["<A-k>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
-          ["<C-p>"] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, "fallback", },
-          ["<C-n>"] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, "fallback", },
           ["<Tab>"] = { function(cmp) return cmp.accept() end, "fallback", },
           ["<CR>"] = { function(cmp)
             if vim.fn.getcmdtype() == ":" then return cmp.accept_and_enter() end

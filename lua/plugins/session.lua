@@ -4,9 +4,7 @@ return {
     lazy = false,
 
     keys = {
-      { "<leader>ps", "<CMD>AutoSession restore<CR>", desc = "[Auto Session] Restore session" },
-      { "<leader>pS", "<CMD>AutoSession search<CR>", desc = "[Auto Session] Search session" },
-      { "<leader>pD", "<CMD>AutoSession delete<CR>", desc = "[Auto Session] Delete session" },
+      { "<leader>ps", "<CMD>AutoSession search<CR>", desc = "[Auto Session] Search session" },
     },
 
     ---enables autocomplete for opts

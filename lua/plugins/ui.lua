@@ -1,23 +1,13 @@
 return {
-  -- 显示Copilot图标
   {
     "nvim-tree/nvim-web-devicons",
-    opts = {
-      override = {
-        copilot = {
-          icon = "",
-          color = "#cba6f7", -- Catppuccin.mocha.mauve
-          name = "Copilot",
-        },
-      },
-    },
+    opts = {},
   },
   -- 配置底部状态栏
   {
     "nvim-lualine/lualine.nvim",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
-      "AndreM222/copilot-lualine",
     },
     opts = {
       options = {
@@ -65,25 +55,7 @@ return {
         padding = 0,
       }
 
-      local copilot = {
-        "copilot",
-        show_colors = true,
-        symbols = {
-          status = {
-            hl = {
-              enabled = mocha.green,
-              sleep = mocha.overlay0,
-              disabled = mocha.surface0,
-              warning = mocha.peach,
-              unknown = mocha.red,
-            },
-          },
-          spinner_color = mocha.mauve,
-        },
-      }
-
       table.insert(opts.sections.lualine_x, 1, macro_recording)
-      table.insert(opts.sections.lualine_c, copilot)
 
       require("lualine").setup(opts)
     end,
@@ -102,19 +74,10 @@ return {
     lazy = false,
     -- stylua: ignore
     keys = {
-      { "<A-<>", "<CMD>BufferMovePrevious<CR>", mode = { "n" }, desc = "[Buffer] Move buffer left" },
-      { "<A->>", "<CMD>BufferMoveNext<CR>",     mode = { "n" }, desc = "[Buffer] Move buffer right" },
-      { "<A-1>", "<CMD>BufferGoto 1<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 1" },
-      { "<A-2>", "<CMD>BufferGoto 2<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 2" },
-      { "<A-3>", "<CMD>BufferGoto 3<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 3" },
-      { "<A-4>", "<CMD>BufferGoto 4<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 4" },
-      { "<A-5>", "<CMD>BufferGoto 5<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 5" },
-      { "<A-6>", "<CMD>BufferGoto 6<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 6" },
-      { "<A-7>", "<CMD>BufferGoto 7<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 7" },
-      { "<A-8>", "<CMD>BufferGoto 8<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 8" },
-      { "<A-9>", "<CMD>BufferGoto 9<CR>",       mode = { "n" }, desc = "[Buffer] Go to buffer 9" },
       { "<A-h>", "<CMD>BufferPrevious<CR>",     mode = { "n" }, desc = "[Buffer] Previous buffer" },
       { "<A-l>", "<CMD>BufferNext<CR>",         mode = { "n" }, desc = "[Buffer] Next buffer" },
+      { "<A-f>", "<CMD>BufferFirst<CR>",     mode = { "n" }, desc = "[Buffer] First buffer" },
+      { "<A-b>", "<CMD>BufferLast<CR>",         mode = { "n" }, desc = "[Buffer] Last buffer" },
     },
     opts = {
       animation = false,
@@ -352,48 +315,6 @@ return {
 
         map("n", "<leader>ggS", gitsigns.stage_buffer, { desc = "[Git] Stage buffer" })
         map("n", "<leader>ggR", gitsigns.reset_buffer, { desc = "[Git] Reset buffer" })
-
-        map("n", "<leader>ggp", gitsigns.preview_hunk, { desc = "[Git] Preview hunk" })
-        map("n", "<leader>ggP", gitsigns.preview_hunk_inline, { desc = "[Git] Preview hunk inline" })
-
-        -- map("n", "<leader>ggb", function() gitsigns.blame_line({ full = true }) end, { desc = "[Git] Blame line" })
-
-        -- stylua: ignore
-        -- map("n", "<leader>ggd", gitsigns.diffthis, { desc = "[Git] diff" })
-        -- stylua: ignore
-        -- map("n", "<leader>ggD", function() gitsigns.diffthis("~") end, { desc = "[Git] diff (ALL)" })
-
-        -- stylua: ignore
-        map("n", "<leader>ggQ", function() gitsigns.setqflist("all") end, { desc = "[Git] Show diffs (ALL) in qflist" })
-        -- stylua: ignore
-        map("n", "<leader>ggq", gitsigns.setqflist, { desc = "[Git] Show diffs in qflist" })
-
-        -- Text object
-        map({ "o", "x" }, "ih", gitsigns.select_hunk, { desc = "[Git] Current hunk" })
-
-        -- Toggles
-        require("snacks")
-          .toggle({
-            name = "line blame",
-            get = function()
-              return require("gitsigns.config").config.current_line_blame
-            end,
-            set = function(enabled)
-              require("gitsigns").toggle_current_line_blame(enabled)
-            end,
-          })
-          :map("<leader>tgb")
-        require("snacks")
-          .toggle({
-            name = "word diff",
-            get = function()
-              return require("gitsigns.config").config.word_diff
-            end,
-            set = function(enabled)
-              require("gitsigns").toggle_word_diff(enabled)
-            end,
-          })
-          :map("<leader>tgw")
       end,
     },
     config = function(_, opts)
@@ -560,41 +481,9 @@ return {
         set_buf_foldlevel(foldlevel)
       end
 
-      -- Keymaps
-      vim.keymap.set("n", "K", function()
-        local winid = require("ufo").peekFoldedLinesUnderCursor()
-        if not winid then
-          vim.lsp.buf.hover()
-        end
-      end)
-
       -- stylua: ignore
       vim.keymap.set("n", "zM", function() set_buf_foldlevel(0) end, { desc = "[UFO] Close all folds" })
       vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "[UFO] Open all folds" })
-
-      vim.keymap.set("n", "zm", function()
-        local count = vim.v.count
-        if count == 0 then
-          count = 1
-        end
-        change_buf_foldlevel_by(-count)
-      end, { desc = "[UFO] Fold More" })
-      vim.keymap.set("n", "zr", function()
-        local count = vim.v.count
-        if count == 0 then
-          count = 1
-        end
-        change_buf_foldlevel_by(count)
-      end, { desc = "[UFO] Fold Less" })
-
-      -- 99% sure `zS` isn't mapped by default
-      vim.keymap.set("n", "zS", function()
-        if vim.v.count == 0 then
-          vim.notify("No foldlevel given to set!", vim.log.levels.WARN)
-        else
-          set_buf_foldlevel(vim.v.count)
-        end
-      end, { desc = "[UFO] Set foldlevel" })
 
       -- Delete some predefined keymaps as they are not compatible with nvim-ufo
       vim.keymap.set("n", "zE", "<NOP>", { desc = "Disabled" })
@@ -610,7 +499,6 @@ return {
     -- stylua: ignore
     keys = {
       { "<leader>E",  "<CMD>Yazi<CR>",        desc = "[Yazi] open at the current file", mode = { "n", "v" } },
-      { "<leader>cw", "<CMD>Yazi cwd<CR>",    desc = "[Yazi] open in working directory"                     },
     },
     opts = {
       open_for_directories = false,

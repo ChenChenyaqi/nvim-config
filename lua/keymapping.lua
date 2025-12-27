@@ -5,10 +5,10 @@ vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
 
 -- 普通模式下的窗口切换
-vim.keymap.set("n", "<C-h>", "<C-w>h")
-vim.keymap.set("n", "<C-l>", "<C-w>l")
-vim.keymap.set("n", "<C-j>", "<C-w>j")
-vim.keymap.set("n", "<C-k>", "<C-w>k")
+-- vim.keymap.set("n", "<C-h>", "<C-w>h")
+-- vim.keymap.set("n", "<C-l>", "<C-w>l")
+-- vim.keymap.set("n", "<C-j>", "<C-w>j")
+-- vim.keymap.set("n", "<C-k>", "<C-w>k")
 
 -- 快速移动（普通模式和可视模式）
 -- Shift+J: 向下移动5行
@@ -29,10 +29,6 @@ vim.keymap.set({ "n", "x" }, "Q", "<CMD>:qa<CR>")
 vim.keymap.set({ "n", "x" }, "qq", "<CMD>:q<CR>")
 -- Ctrl+s: 保存文件
 vim.keymap.set({ "n", "x" }, "<C-s>", "<CMD>:w<CR>", { desc = "Save file" })
-
--- 切换自动换行
--- Alt+z: 切换行换行显示
-vim.keymap.set("n", "<A-z>", "<CMD>set wrap!<CR>", { desc = "Toggle line wrap" })
 
 -- 清空查询时的高亮
 vim.keymap.set("n", "<leader>l", "<CMD>noh<CR>", { desc = "Clear highlight" })

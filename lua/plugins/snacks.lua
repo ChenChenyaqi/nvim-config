@@ -87,19 +87,10 @@ return {
         win = {
           input = {
             keys = {
-              -- 选择器键盘映射
-              ["<Tab>"] = { "select_and_prev", mode = { "i", "n" } }, -- Tab：选择并上一个
-              ["<S-Tab>"] = { "select_and_next", mode = { "i", "n" } }, -- Shift+Tab：选择并下一个
-              ["<A-Up>"] = { "history_back", mode = { "n", "i" } }, -- Alt+上：历史后退
-              ["<A-Down>"] = { "history_forward", mode = { "n", "i" } }, -- Alt+下：历史前进
               ["<A-j>"] = { "list_down", mode = { "n", "i" } }, -- Alt+j：列表向下
               ["<A-k>"] = { "list_up", mode = { "n", "i" } }, -- Alt+k：列表向上
               ["<C-u>"] = { "preview_scroll_up", mode = { "n", "i" } }, -- Ctrl+u：预览向上滚动
               ["<C-d>"] = { "preview_scroll_down", mode = { "n", "i" } }, -- Ctrl+d：预览向下滚动
-              ["<A-u>"] = { "list_scroll_up", mode = { "n", "i" } }, -- Alt+u：列表向上滚动
-              ["<A-d>"] = { "list_scroll_down", mode = { "n", "i" } }, -- Alt+d：列表向下滚动
-              ["<c-j>"] = {}, -- Ctrl+j：未绑定
-              ["<c-k>"] = {}, -- Ctrl+k：未绑定
             },
           },
         },
@@ -152,9 +143,7 @@ return {
       { "<A-i>",           function() require("snacks").terminal() end,                     desc = "[Snacks] Toggle terminal",          mode = { "n", "t" } }, -- Alt+i：切换终端
 
       -- 通知功能
-      { "<leader>sn",      function() require("snacks").picker.notifications() end,         desc = "[Snacks] Notification history" },      -- leader+sn：通知历史
       { "<leader>n",       function() require("snacks").notifier.show_history() end,        desc = "[Snacks] Notification history" },      -- leader+n：通知历史
-      { "<leader>un",      function() require("snacks").notifier.hide() end,                desc = "[Snacks] Dismiss all notifications" }, -- leader+un：关闭所有通知
 
       -- 顶部选择器和浏览器
       { "<leader><space>", function() require("snacks").picker.smart() end,                 desc = "[Snacks] Smart find files" }, -- leader+空格：智能查找文件
@@ -163,10 +152,9 @@ return {
       { "<leader>sb",      function() require("snacks").picker.buffers() end,               desc = "[Snacks] Buffers" },        -- leader+sb：缓冲区列表
       { "<leader>sf",      function() require("snacks").picker.files({exclude = {
         "**/node_modules/**",
-        "**/dist/**"
+        "**/dist/**",
+        '**/.git/**'
       }}) end,                 desc = "[Snacks] Find files" },     -- leader+sf：查找文件
-      { "<leader>sp",      function() require("snacks").picker.projects() end,              desc = "[Snacks] Projects" },       -- leader+sp：项目列表
-      { "<leader>sr",      function() require("snacks").picker.recent() end,                desc = "[Snacks] Recent" },         -- leader+sr：最近文件
       { "<leader>sg",      function() require("snacks").picker.grep() end,                  desc = "[Snacks] Grep" }, -- leader+sg：全局 Grep
       { "<leader>sw", function() require("snacks").picker.grep_word() end, desc = "[Snacks] Visual selection or word", mode = { "n", "x" } },  -- 已注释：单词 Grep
 
@@ -184,8 +172,6 @@ return {
       { "<leader>sA",      function() require("snacks").picker.autocmds() end,              desc = "[Snacks] Autocmds" },               -- leader+sA：自动命令
       { "<leader>s:",      function() require("snacks").picker.command_history() end,       desc = "[Snacks] Command history" },        -- leader+s:：命令历史
       { "<leader>sc",      function() require("snacks").picker.commands() end,              desc = "[Snacks] Commands" },               -- leader+sc：命令列表
-      -- { "<leader>sd",      function() require("snacks").picker.diagnostics() end,           desc = "[Snacks] Diagnostics" },            -- leader+sd：诊断信息
-      -- { "<leader>sD",      function() require("snacks").picker.diagnostics_buffer() end,    desc = "[Snacks] Diagnostics buffer" },     -- leader+sD：缓冲区诊断
       { "<leader>sH",      function() require("snacks").picker.help() end,                  desc = "[Snacks] Help pages" },             -- leader+sH：帮助页面
       { "<leader>sh",      function() require("snacks").picker.highlights() end,            desc = "[Snacks] Highlights" },             -- leader+sh：高亮组
       { "<leader>sj",      function() require("snacks").picker.jumps() end,                 desc = "[Snacks] Jumps" },                  -- leader+sj：跳转列表
@@ -200,16 +186,6 @@ return {
 
       -- LSP 功能
       { "gd",              function() require("snacks").picker.lsp_definitions() end,       desc = "[Snacks] Goto definition" },        -- gd：跳转到定义
-      { "gD",              function() require("snacks").picker.lsp_declarations() end,      desc = "[Snacks] Goto declaration" },       -- gD：跳转到声明
-      { "gr",              function() require("snacks").picker.lsp_references() end,        desc = "[Snacks] References" },             -- gr：查找引用
-      { "gI",              function() require("snacks").picker.lsp_implementations() end,   desc = "[Snacks] Goto implementation" },    -- gI：跳转到实现
-      { "gy",              function() require("snacks").picker.lsp_type_definitions() end,  desc = "[Snacks] Goto t[y]pe definition" }, -- gy：跳转到类型定义
-      { "<leader>ss",      function() require("snacks").picker.lsp_symbols() end,           desc = "[Snacks] LSP symbols" },            -- leader+ss：LSP 符号
-      { "<leader>sS",      function() require("snacks").picker.lsp_workspace_symbols() end, desc = "[Snacks] LSP workspace symbols" },  -- leader+sS：工作区符号
-
-      -- 单词导航
-      { "]]",              function() require("snacks").words.jump(vim.v.count1) end,       desc = "[Snacks] Next Reference",           mode = { "n", "t" } }, -- ]]：下一个引用
-      { "[[",              function() require("snacks").words.jump(-vim.v.count1) end,      desc = "[Snacks] Prev Reference",           mode = { "n", "t" } }, -- [[：上一个引用
     },
 
     init = function()
@@ -230,60 +206,8 @@ return {
           end
           vim.print = _G.dd -- 重载 print 函数，用于 `:=` 命令
 
-          -- 创建动画切换映射
-          Snacks.toggle
-            .new({
-              id = "Animation",
-              name = "Animation",
-              get = function()
-                return Snacks.animate.enabled()
-              end,
-              set = function(state)
-                vim.g.snacks_animate = state
-              end,
-            })
-            :map("<leader>ta") -- leader+ta：切换动画
-
-          -- 创建滚动动画切换映射
-          Snacks.toggle
-            .new({
-              id = "scroll_anima",
-              name = "Scroll animation",
-              get = function()
-                return Snacks.scroll.enabled
-              end,
-              set = function(state)
-                if state then
-                  Snacks.scroll.enable()
-                else
-                  Snacks.scroll.disable()
-                end
-              end,
-            })
-            :map("<leader>tS") -- leader+tS：切换滚动动画
-
           -- 创建各种切换映射
-          Snacks.toggle.dim():map("<leader>tD") -- leader+tD：切换暗化效果
-
-          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts") -- leader+ts：切换拼写检查
           Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw") -- leader+tw：切换换行
-          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>tL") -- leader+tL：切换相对行号
-          Snacks.toggle.diagnostics():map("<leader>td") -- leader+td：切换诊断显示
-          Snacks.toggle.line_number():map("<leader>tl") -- leader+tl：切换行号显示
-          Snacks.toggle
-            .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-            :map("<leader>tc") -- leader+tc：切换隐藏级别
-          Snacks.toggle.treesitter():map("<leader>tT") -- leader+tT：切换 Tree-sitter
-          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>tb") -- leader+tb：切换背景
-          Snacks.toggle.inlay_hints():map("<leader>th") -- leader+th：切换内联提示
-          Snacks.toggle.indent():map("<leader>tg") -- leader+tg：切换缩进高亮
-          Snacks.toggle.dim():map("<leader>tD") -- leader+tD：切换暗化效果（重复）
-
-          -- 切换性能分析器
-          Snacks.toggle.profiler():map("<leader>tpp") -- leader+tpp：切换性能分析器
-          -- 切换性能分析器高亮
-          Snacks.toggle.profiler_highlights():map("<leader>tph") -- leader+tph：切换性能分析器高亮
-
           -- 删除冲突的键盘映射
           vim.keymap.del("n", "grn")
           vim.keymap.del("n", "gra")

@@ -165,49 +165,6 @@ return {
   {
     "folke/trouble.nvim",
     cmd = "Trouble", -- 命令模式加载
-    -- 快捷键配置
-    keys = {
-      {
-        "<A-j>",
-        function()
-          vim.diagnostic.jump({ count = 1 })
-        end,
-        mode = { "n" },
-        desc = "Go to next diagnostic",
-      },
-      {
-        "<A-k>",
-        function()
-          vim.diagnostic.jump({ count = -1 })
-        end,
-        mode = { "n" },
-        desc = "Go to previous diagnostic",
-      },
-      {
-        "<leader>gd",
-        "<CMD>Trouble diagnostics toggle<CR>",
-        desc = "[Trouble] Toggle buffer diagnostics",
-      },
-      {
-        "<leader>gs",
-        "<CMD>Trouble symbols toggle focus=false<CR>",
-        desc = "[Trouble] Toggle symbols ",
-      },
-      {
-        "<leader>gl",
-        "<CMD>Trouble lsp toggle focus=false win.position=right<CR>",
-        desc = "[Trouble] Toggle LSP definitions/references/...",
-      },
-      { "<leader>gL", "<CMD>Trouble loclist toggle<CR>", desc = "[Trouble] Location List" },
-      { "<leader>gq", "<CMD>Trouble qflist toggle<CR>", desc = "[Trouble] Quickfix List" },
-
-      -- 注释掉的快捷键（可选功能）
-      -- { "grr", "<CMD>Trouble lsp_references focus=true<CR>",         mode = { "n" }, desc = "[Trouble] LSP references"                        },
-      -- { "gD", "<CMD>Trouble lsp_declarations focus=true<CR>",        mode = { "n" }, desc = "[Trouble] LSP declarations"                      },
-      -- { "gd", "<CMD>Trouble lsp_type_definitions focus=true<CR>",    mode = { "n" }, desc = "[Trouble] LSP type definitions"                  },
-      -- { "gri", "<CMD>Trouble lsp_implementations focus=true<CR>",    mode = { "n" }, desc = "[Trouble] LSP implementations"                   },
-    },
-
     specs = {
       "folke/snacks.nvim",
       opts = function(_, opts)
@@ -217,9 +174,7 @@ return {
             win = {
               input = {
                 -- 快捷键配置
-                keys = {
-                  ["<c-t>"] = { "trouble_open", mode = { "n", "i" } },
-                },
+                keys = {},
               },
             },
           },
