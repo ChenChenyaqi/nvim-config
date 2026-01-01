@@ -44,3 +44,6 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>df", "V$%d", { desc = "Delete a function" })
 -- 复制函数
 vim.keymap.set("n", "<leader>cf", "V$%y", { desc = "Copy a function" })
+
+-- code action
+vim.keymap.set("n", "<A-.>", vim.lsp.buf.code_action, {})

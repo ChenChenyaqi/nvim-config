@@ -153,7 +153,7 @@ return {
       require("lint").linters_by_ft = all_linting_config
 
       -- 保存后自动运行代码检查
-      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+      vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
         callback = function()
           -- try_lint 根据文件类型运行对应的检查器
           require("lint").try_lint()
