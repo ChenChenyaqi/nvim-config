@@ -174,13 +174,11 @@ end
 -- 获取 Web 代码检查配置
 M.get_web_linting_config = function()
   return {
-    typescript = { "eslint", "cspell" },
-    typescriptreact = { "eslint", "cspell" },
-    javascript = { "eslint", "cspell" },
-    javascriptreact = { "eslint", "cspell" },
-    vue = { "eslint", "cspell" },
-    json = { "cspell" },
-    markdown = { "cspell" },
+    typescript = { "eslint" },
+    typescriptreact = { "eslint" },
+    javascript = { "eslint" },
+    javascriptreact = { "eslint" },
+    vue = { "eslint" },
   }
 end
 

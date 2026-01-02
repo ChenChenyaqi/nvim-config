@@ -58,6 +58,9 @@ vim.g.mapleader = " "
 -- 本地领导者键是反斜杠
 vim.g.maplocalleader = "\\"
 
+-- off nvim spell
+vim.opt.spell = false
+
 -- 加载 lazy.nvim 插件管理器
 require("config.lazy") -- Import `./lua/config/lazy.lua`
 

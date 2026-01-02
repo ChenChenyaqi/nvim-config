@@ -140,6 +140,34 @@ return {
         :map("<leader>tf") -- <leader>tf 切换自动格式化
     end,
   },
+  -- cspell
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "davidmh/cspell.nvim", -- 关键：这个插件提供了 Code Action 的具体实现
+    },
+    config = function()
+      local null_ls = require("null-ls")
+      local cspell = require("cspell")
+
+      -- cspell.json 的配置（可选）
+      local cspell_config = {
+        -- 可以在这里指定查找配置文件的逻辑，默认通常够用了
+        -- find_json = function(cwd) return os.getenv("HOME") .. "/.config/cspell.json" end
+      }
+
+      null_ls.setup({
+        sources = {
+          -- 1. 启用 CSpell 的诊断 (报错红线)
+          cspell.diagnostics.with({ config = cspell_config }),
+
+          -- 2. 启用 CSpell 的 Code Actions (核心功能：提供"Add to dictionary"选项)
+          cspell.code_actions.with({ config = cspell_config }),
+        },
+      })
+    end,
+  },
   -- nvim-lint - 代码静态检查插件
   {
     "mfussenegger/nvim-lint",

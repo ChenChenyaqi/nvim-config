@@ -76,13 +76,6 @@ return {
             args = {}, -- 传递给 Git 命令的额外参数
           },
         },
-        -- 数据源设置
-        sources = {
-          -- 拼写检查：使用选择布局
-          spelling = {
-            layout = { preset = "select" },
-          },
-        },
         -- 窗口和键盘映射设置
         win = {
           input = {
@@ -168,7 +161,6 @@ return {
       -- 搜索功能
       { '<leader>s"',      function() require("snacks").picker.registers() end,             desc = "[Snacks] Registers" },              -- leader+s"：寄存器
       { '<leader>s/',      function() require("snacks").picker.search_history() end,        desc = "[Snacks] Search history" },         -- leader+s/：搜索历史
-      { "<leader>sa",      function() require("snacks").picker.spelling() end,              desc = "[Snacks] Spelling" },               -- leader+sa：拼写检查
       { "<leader>sA",      function() require("snacks").picker.autocmds() end,              desc = "[Snacks] Autocmds" },               -- leader+sA：自动命令
       { "<leader>s:",      function() require("snacks").picker.command_history() end,       desc = "[Snacks] Command history" },        -- leader+s:：命令历史
       { "<leader>sc",      function() require("snacks").picker.commands() end,              desc = "[Snacks] Commands" },               -- leader+sc：命令列表
@@ -180,7 +172,7 @@ return {
       { "<leader>sm",      function() require("snacks").picker.marks() end,                 desc = "[Snacks] Marks" },                  -- leader+sm：标记
       { "<leader>sM",      function() require("snacks").picker.man() end,                   desc = "[Snacks] Man pages" },              -- leader+sM：手册页
       { "<leader>sp",      function() require("snacks").picker.lazy() end,                  desc = "[Snacks] Search for plugin spec" }, -- leader+sp：插件搜索
-      { "<leader>sq",      function() require("snacks").picker.qflist() end,                desc = "[Snacks] Quickfix list" },          -- leader+sq：快速修复列表
+      -- { "<leader>sq",      function() require("snacks").picker.qflist() end,                desc = "[Snacks] Quickfix list" },          -- leader+sq：快速修复列表
       { "<leader>sr",      function() require("snacks").picker.resume() end,                desc = "[Snacks] Resume" },                 -- leader+sr：恢复搜索
       { "<leader>su",      function() require("snacks").picker.undo() end,                  desc = "[Snacks] Undo history" },           -- leader+su：撤销历史
 

@@ -47,3 +47,7 @@ vim.keymap.set("n", "<leader>cf", "V$%y", { desc = "Copy a function" })
 
 -- code action
 vim.keymap.set("n", "<A-.>", vim.lsp.buf.code_action, {})
+
+vim.keymap.set("n", "<leader>sq", function()
+  vim.diagnostic.setqflist({ open = true, bufnr = 0 })
+end, { desc = "Show buffer diagnostics in Quickfix" })
