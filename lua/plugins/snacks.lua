@@ -154,7 +154,7 @@ return {
       -- Git 功能
       { "<C-g>",           function() require("snacks").lazygit() end,                      desc = "[Snacks] Lazygit" },        -- Ctrl+g：打开 Lazygit
       { "<leader>ggl",     function() require("snacks").picker.git_log() end,               desc = "[Snacks] Git log" },        -- leader+ggl：Git 日志
-      { "<leader>ggd",     function() require("snacks").picker.git_diff() end,              desc = "[Snacks] Git diff" },       -- leader+ggd：Git 差异
+      -- { "<leader>ggd",     function() require("snacks").picker.git_diff() end,              desc = "[Snacks] Git diff" },       -- leader+ggd：Git 差异
       { "<leader>ggb",     function() require("snacks").git.blame_line() end,               desc = "[Snacks] Git blame line" }, -- leader+ggb：Git 行级责备
       { "<leader>ggB",     function() require("snacks").gitbrowse() end,                    desc = "[Snacks] Git browse" },     -- leader+ggB：Git 浏览
 
