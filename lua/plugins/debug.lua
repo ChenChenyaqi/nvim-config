@@ -221,7 +221,7 @@ return {
       end
 
       -- === 4. TypeScript/Vitest 调试规则 ===
-      for _, language in ipairs({ "typescript", "javascript", "typescriptreact" }) do
+      for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
         dap.configurations[language] = {
           {
             type = "pwa-node",

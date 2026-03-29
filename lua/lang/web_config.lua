@@ -2,21 +2,13 @@
 local M = {}
 
 -- 获取 TypeScript LSP 配置
-M.get_ts_lsp_config = function(capabilities, vue_language_server_path)
+M.get_ts_lsp_config = function(capabilities)
   return {
     "ts_ls",
     {
       capabilities = capabilities,
-      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-      init_options = {
-        plugins = {
-          {
-            name = "@vue/typescript-plugin",
-            location = vue_language_server_path,
-            languages = { "vue" },
-          },
-        },
-      },
+      -- Let vue_ls exclusively handle `.vue` buffers to avoid duplicate or conflicting LSP features.
+      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
       settings = {
         typescript = {
           inlayHints = {

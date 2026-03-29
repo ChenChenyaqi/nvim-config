@@ -27,15 +27,12 @@ M.ensure_installed = {
 
 -- 获取所有 LSP 配置
 M.get_all_lsp_configs = function(capabilities)
-  local vue_language_server_path = vim.fn.stdpath("data")
-    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
-
   return {
     -- Lua LSP
     M.lua_config.get_lsp_config(capabilities),
 
     -- Web 开发 LSP
-    M.web_config.get_ts_lsp_config(capabilities, vue_language_server_path),
+    M.web_config.get_ts_lsp_config(capabilities),
     M.web_config.get_vue_lsp_config(capabilities),
     M.web_config.get_html_lsp_config(capabilities),
     M.web_config.get_css_lsp_config(capabilities),

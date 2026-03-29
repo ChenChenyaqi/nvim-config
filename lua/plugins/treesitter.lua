@@ -16,6 +16,7 @@ return {
           "elixir",
           "heex",
           "javascript",
+          "tsx",
           "html",
           "vue",
           "typescript",
@@ -25,7 +26,6 @@ return {
         sync_install = false,
         highlight = {
           enable = true,
-          disable = { "vue" },
         },
         indent = { enable = true, disable = { "vue" } },
       })
