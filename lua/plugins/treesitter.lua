@@ -22,6 +22,8 @@ return {
           "typescript",
           "css",
           "scss",
+          "markdown",
+          "markdown_inline",
         },
         sync_install = false,
         highlight = {

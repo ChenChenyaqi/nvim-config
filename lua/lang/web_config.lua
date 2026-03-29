@@ -151,15 +151,15 @@ end
 -- 获取 Web 格式化配置
 M.get_web_formatting_config = function()
   return {
-    typescript = { "prettier" },
-    typescriptreact = { "prettier" },
-    javascript = { "prettier" },
-    javascriptreact = { "prettier" },
-    vue = { "prettier" },
-    html = { "prettier" },
-    css = { "prettier" },
-    scss = { "prettier" },
-    less = { "prettier" },
+    typescript = { "prettierd" },
+    typescriptreact = { "prettierd" },
+    javascript = { "prettierd" },
+    javascriptreact = { "prettierd" },
+    vue = { "prettierd" },
+    html = { "prettierd" },
+    css = { "prettierd" },
+    scss = { "prettierd" },
+    less = { "prettierd" },
   }
 end
 
