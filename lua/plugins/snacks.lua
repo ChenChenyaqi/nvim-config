@@ -54,6 +54,8 @@ return {
       lazygit = {
         enabled = true,
         configure = false,
+        width = 0.95,
+        height = 0.95,
       },
       -- 通知系统：启用通知功能，使用通知样式
       notifier = {
