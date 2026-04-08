@@ -8,6 +8,7 @@ M.lua_config = require("lang.lua_config")
 M.web_config = require("lang.web_config")
 M.json_config = require("lang.json_config")
 M.swift_config = require("lang.swift_config")
+M.dart_config = require("lang.dart_config")
 M.markdown_config = require("lang.markdown_config")
 
 M.lang_table = {
@@ -63,6 +64,7 @@ M.get_all_formatting_config = function()
   merge_configs(configs, M.web_config.get_web_formatting_config())
   merge_configs(configs, M.json_config.get_json_formatting_config())
   merge_configs(configs, M.swift_config.get_swift_formatting_config())
+  merge_configs(configs, M.dart_config.get_dart_formatting_config())
   merge_configs(configs, M.markdown_config.get_markdown_formatting_config())
 
   return configs
