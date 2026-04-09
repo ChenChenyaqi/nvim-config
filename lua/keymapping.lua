@@ -29,6 +29,10 @@ vim.keymap.set({ "n", "x" }, "Q", "<CMD>:qa<CR>")
 vim.keymap.set({ "n", "x" }, "qq", "<CMD>:q<CR>")
 -- Ctrl+s: 保存文件
 vim.keymap.set({ "n", "x" }, "<C-s>", "<CMD>:w<CR>", { desc = "Save file" })
+-- 手动格式化当前缓冲区或选区
+vim.keymap.set({ "n", "x" }, "<leader>fm", function()
+  require("conform").format({ async = false, lsp_format = "fallback" })
+end, { desc = "Format file" })
 
 -- 清空查询时的高亮
 vim.keymap.set("n", "<leader>l", "<CMD>noh<CR>", { desc = "Clear highlight" })
