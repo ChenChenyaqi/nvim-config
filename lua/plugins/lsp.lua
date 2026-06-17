@@ -165,8 +165,13 @@ return {
 
       null_ls.setup({
         sources = {
-          -- 1. 启用 CSpell 的诊断 (报错红线)
-          cspell.diagnostics.with({ config = cspell_config }),
+          -- 1. 启用 CSpell 的诊断 (拼写错误改为提示，不使用报错红线)
+          cspell.diagnostics.with({
+            config = cspell_config,
+            diagnostics_postprocess = function(diagnostic)
+              diagnostic.severity = vim.diagnostic.severity.HINT
+            end,
+          }),
 
           -- 2. 启用 CSpell 的 Code Actions (核心功能：提供"Add to dictionary"选项)
           cspell.code_actions.with({ config = cspell_config }),
