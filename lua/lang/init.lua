@@ -12,12 +12,12 @@ M.dart_config = require("lang.dart_config")
 M.markdown_config = require("lang.markdown_config")
 
 M.lang_table = {
-  { "lua_ls", "ts_ls", "vue_ls", "eslint", "html", "cssls", "tailwindcss", "jsonls", "sourcekit" },
+  { "lua_ls", "vtsls", "vue_ls", "eslint", "html", "cssls", "tailwindcss", "jsonls", "sourcekit" },
 }
 
 M.ensure_installed = {
   "lua-language-server",
-  "typescript-language-server",
+  "vtsls",
   "vue-language-server",
   "eslint-lsp",
   "prettierd",
@@ -34,7 +34,7 @@ M.get_all_lsp_configs = function(capabilities)
     M.lua_config.get_lsp_config(capabilities),
 
     -- Web 开发 LSP
-    M.web_config.get_ts_lsp_config(capabilities),
+    M.web_config.get_vtsls_lsp_config(capabilities),
     M.web_config.get_vue_lsp_config(capabilities),
     M.web_config.get_html_lsp_config(capabilities),
     M.web_config.get_css_lsp_config(capabilities),

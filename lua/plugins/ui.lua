@@ -11,7 +11,7 @@ return {
     },
     opts = {
       options = {
-        theme = "catppuccin",
+        theme = "catppuccin-nvim",
         always_divide_middle = false,
         component_separators = { left = "", right = "" },
         section_separators = { left = "", right = "" },
@@ -200,6 +200,7 @@ return {
         enabled = false,
       },
       lsp = {
+        hover = { silent = true }, -- 抑制「No information available」误报,保留正常浮窗+边框
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = false,

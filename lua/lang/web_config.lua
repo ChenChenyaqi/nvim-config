@@ -1,15 +1,35 @@
 -- Web 开发相关语言配置 (TypeScript, Vue, HTML, CSS)
 local M = {}
 
--- 获取 TypeScript LSP 配置
-M.get_ts_lsp_config = function(capabilities)
+-- 获取 VUE TS plugin 的路径(随 mason 的 vue-language-server 打包)
+-- vue_ls 混合模式下,vtsls 需要加载此 plugin 才能解析 .vue 的 <script>
+local function vue_ts_plugin_path()
+  return vim.fn.stdpath("data")
+    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+end
+
+-- 获取 Vtsls LSP 配置 (vue_ls 官方推荐的 TypeScript 档档)
+-- 自 Volar v3 起,vue_ls 只管 <template>,<script lang="ts"> 需 vtsls + @vue/typescript-plugin
+M.get_vtsls_lsp_config = function(capabilities)
   return {
-    "ts_ls",
+    "vtsls",
     {
       capabilities = capabilities,
-      -- Let vue_ls exclusively handle `.vue` buffers to avoid duplicate or conflicting LSP features.
-      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
+      -- 必须包含 vue,让 vtsls 也挂在 .vue buffer 上(vue_ls 混合模式需要它)
+      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
       settings = {
+        vtsls = {
+          tsserver = {
+            globalPlugins = {
+              {
+                name = "@vue/typescript-plugin",
+                location = vue_ts_plugin_path(),
+                languages = { "vue" },
+                configNamespace = "typescript",
+              },
+            },
+          },
+        },
         typescript = {
           inlayHints = {
             includeInlayParameterNameHints = "all",
