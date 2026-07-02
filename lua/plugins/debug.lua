@@ -190,7 +190,7 @@ return {
       -- === 3. Mason 与 Adapter 配置 (保持之前的修复逻辑) ===
       require("mason").setup()
       require("mason-nvim-dap").setup({
-        ensure_installed = { "js-debug-adapter" },
+        ensure_installed = { "js-debug-adapter", "codelldb" }, -- codelldb 供 rustaceanvim 调试 Rust
       })
 
       -- 动态查找路径的函数 (兼容 src 和 out)

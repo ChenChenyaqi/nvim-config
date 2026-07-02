@@ -10,6 +10,7 @@ M.json_config = require("lang.json_config")
 M.swift_config = require("lang.swift_config")
 M.dart_config = require("lang.dart_config")
 M.markdown_config = require("lang.markdown_config")
+M.rust_config = require("lang.rust_config")
 
 M.lang_table = {
   { "lua_ls", "vtsls", "vue_ls", "eslint", "html", "cssls", "tailwindcss", "jsonls", "sourcekit" },
@@ -66,6 +67,7 @@ M.get_all_formatting_config = function()
   merge_configs(configs, M.swift_config.get_swift_formatting_config())
   merge_configs(configs, M.dart_config.get_dart_formatting_config())
   merge_configs(configs, M.markdown_config.get_markdown_formatting_config())
+  merge_configs(configs, M.rust_config.get_rust_formatting_config())
 
   return configs
 end

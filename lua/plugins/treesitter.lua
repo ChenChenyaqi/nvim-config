@@ -25,6 +25,7 @@ return {
           "dart",
           "markdown",
           "markdown_inline",
+          "rust",
         },
         sync_install = false,
         highlight = {
