@@ -216,8 +216,6 @@ return {
         lsp_doc_border = true, -- add a border to hover docs and signature help
       },
       routes = {
-        -- Hide search count
-        { filter = { event = "msg_show", kind = "search_count" }, opts = { skip = true } },
         -- Hide written message
         { filter = { event = "msg_show", kind = "" }, opts = { skip = true } },
       },
