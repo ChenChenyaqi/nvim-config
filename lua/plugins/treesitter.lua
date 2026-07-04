@@ -22,7 +22,6 @@ return {
           "typescript",
           "css",
           "scss",
-          "dart",
           "markdown",
           "markdown_inline",
           "rust",
@@ -31,7 +30,7 @@ return {
         highlight = {
           enable = true,
         },
-        indent = { enable = true, disable = { "vue", "dart" } },
+        indent = { enable = true, disable = { "vue" } },
       })
     end,
   },

@@ -116,15 +116,9 @@ return {
         formatters_by_ft = formatters_by_ft,
 
         -- 自动格式化开关
-        format_on_save = function(bufnr)
+        format_on_save = function(_)
           -- 通过全局变量控制是否启用自动格式化
           if vim.g.enable_autoformat then
-            local filetype = vim.bo[bufnr].filetype
-
-            if filetype == "dart" then
-              return { timeout_ms = 5000, lsp_format = "never" }
-            end
-
             return { timeout_ms = 1000, lsp_format = "fallback" }
           end
         end,
