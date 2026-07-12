@@ -73,10 +73,6 @@ return {
             desc = "[Trouble] Buffer Diagnostics",
           })
           vim.keymap.set("n", "<leader>gk", vim.lsp.buf.signature_help, { desc = "[LSP] Signature help" })
-          vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle focus=true<cr>", {
-            buffer = ev.buf,
-            desc = "[LSP] References (Trouble)",
-          })
         end,
       })
     end,

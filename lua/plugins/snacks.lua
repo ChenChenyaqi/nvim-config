@@ -180,6 +180,7 @@ return {
 
       -- LSP 功能
       { "gd",              function() require("snacks").picker.lsp_definitions() end,       desc = "[Snacks] Goto definition" },        -- gd：跳转到定义
+      { "gr",            function() require("snacks").picker.lsp_references() end, nowait = true, desc = "[Snacks] References" },          -- gr：查找所有引用
     },
 
     init = function()
