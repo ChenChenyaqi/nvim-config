@@ -151,10 +151,11 @@ return {
       local null_ls = require("null-ls")
       local cspell = require("cspell")
 
-      -- cspell.json 的配置（可选）
+      -- 全局 cspell.json：拼写词表与 Code Action 都写入此文件
       local cspell_config = {
-        -- 可以在这里指定查找配置文件的逻辑，默认通常够用了
-        -- find_json = function(cwd) return os.getenv("HOME") .. "/.config/cspell.json" end
+        find_json = function(cwd)
+          return os.getenv("HOME") .. "/.config/cspell.json"
+        end,
       }
 
       null_ls.setup({
