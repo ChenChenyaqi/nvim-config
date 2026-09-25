@@ -182,11 +182,40 @@ return {
       -- 不同语言的检查器配置
       require("lint").linters_by_ft = all_linting_config
 
+      -- ESLint 配置文件列表（旧式 .eslintrc + 新式 flat config）
+      local eslint_config_files = {
+        ".eslintrc",
+        ".eslintrc.js",
+        ".eslintrc.cjs",
+        ".eslintrc.json",
+        ".eslintrc.yaml",
+        ".eslintrc.yml",
+        "eslint.config.js",
+        "eslint.config.mjs",
+        "eslint.config.cjs",
+      }
+
+      -- 判断从当前文件向上查找是否能找到 ESLint 配置文件
+      local function has_eslint_config(filename)
+        if filename == "" then
+          return false
+        end
+        return vim.fs.find(eslint_config_files, { upward = true, path = filename })[1] ~= nil
+      end
+
       -- 保存后自动运行代码检查
       vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
         callback = function()
           -- try_lint 根据文件类型运行对应的检查器
-          require("lint").try_lint()
+          -- 仅当项目中存在 ESLint 配置时才运行 eslint，避免报 ENOENT
+          require("lint").try_lint(nil, {
+            filter = function(linter)
+              if linter.name ~= "eslint" then
+                return true
+              end
+              return has_eslint_config(vim.api.nvim_buf_get_name(0))
+            end,
+          })
         end,
       })
     end,
